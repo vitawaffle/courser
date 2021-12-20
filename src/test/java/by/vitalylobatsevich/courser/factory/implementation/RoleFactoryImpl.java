@@ -17,6 +17,7 @@ public class RoleFactoryImpl implements RoleFactory {
     public Role createEntityWithExistingId() {
         val role = new Role();
         role.setId(1L);
+        role.setName("TEST_ROLE_1");
         return role;
     }
 

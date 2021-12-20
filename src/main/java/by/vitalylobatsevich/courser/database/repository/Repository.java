@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.database.repository;
 
 import by.vitalylobatsevich.courser.database.entity.Entity;
+
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.util.Streamable;
 

@@ -3,7 +3,9 @@ package by.vitalylobatsevich.courser.application.service.implementation;
 import by.vitalylobatsevich.courser.application.service.RoleService;
 import by.vitalylobatsevich.courser.database.entity.Role;
 import by.vitalylobatsevich.courser.database.repository.RoleRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;

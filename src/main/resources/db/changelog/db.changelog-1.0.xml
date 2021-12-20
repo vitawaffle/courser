@@ -15,4 +15,33 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_users_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="default">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="username" type="text">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_users_roles_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)"
+               context="default">
+        <createTable tableName="users_roles">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" referencedTableName="users" referencedColumnNames="id"
+                             foreignKeyName="users_roles_user_id_fk" />
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false" referencedTableName="roles" referencedColumnNames="id"
+                             foreignKeyName="users_roles_role_id_fk" />
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="users_roles" columnNames="user_id, role_id" />
+    </changeSet>
+
 </databaseChangeLog>

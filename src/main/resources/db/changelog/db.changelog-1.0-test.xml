@@ -16,4 +16,19 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_test_users" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="test">
+        <insert tableName="users">
+            <column name="username" value="TestUser1" />
+            <column name="password" value="$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6" />
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="TestUser2" />
+            <column name="password" value="$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6" />
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="TestUser3" />
+            <column name="password" value="$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

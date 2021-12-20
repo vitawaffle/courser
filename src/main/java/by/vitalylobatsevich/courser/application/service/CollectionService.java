@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.application.service;
 
 import by.vitalylobatsevich.courser.database.entity.Entity;
+
 import org.springframework.data.util.Streamable;
 
 import java.util.Optional;

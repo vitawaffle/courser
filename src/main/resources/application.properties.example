@@ -1,0 +1,11 @@
+spring.datasource.url=<database-jdbc-connection-url>
+spring.datasource.username=<database-username>
+spring.datasource.password=<database-password>
+
+spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.xml
+spring.liquibase.contexts=[default|test]
+
+spring.thymeleaf.cache=false
+
+logging.level.root=INFO
+logging.file.name=log/application.log

@@ -15,11 +15,10 @@ public class PropertiesPasswordValidationConfigurator extends PasswordValidation
 
     private final Properties validationProperties = new Properties();
 
-    public PropertiesPasswordValidationConfigurator() {
+    public PropertiesPasswordValidationConfigurator(final String pathToPropertyFile) {
         try {
             validationProperties.load(
-                    new FileInputStream(ResourceUtils.getFile("classpath:validation.properties"))
-            );
+                    new FileInputStream(ResourceUtils.getFile(pathToPropertyFile)));
         } catch (final FileNotFoundException exception) {
             log.error("File validation.properties is not found", exception);
         } catch (final IOException exception) {
@@ -54,17 +53,17 @@ public class PropertiesPasswordValidationConfigurator extends PasswordValidation
 
     @Override
     protected Optional<Boolean> isHaveBigLetterActive() {
-        return getBooleanRuleActivation("password.have-big-letter");
+        return getBooleanRuleActivation("password.has-big-letter");
     }
 
     @Override
     protected Optional<Boolean> isHaveSmallLetterActive() {
-        return getBooleanRuleActivation("password.have-small-letter");
+        return getBooleanRuleActivation("password.has-small-letter");
     }
 
     @Override
     protected Optional<Boolean> isHaveNumberActive() {
-        return getBooleanRuleActivation("password.have-number");
+        return getBooleanRuleActivation("password.has-number");
     }
 
 }

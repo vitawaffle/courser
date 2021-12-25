@@ -10,7 +10,7 @@ public class ValidationConfiguration {
 
     @Bean
     public PasswordValidationConfigurator passwordValidationConfigurator() {
-        return new PropertiesPasswordValidationConfigurator();
+        return new PropertiesPasswordValidationConfigurator("classpath:validation.properties");
     }
 
 }

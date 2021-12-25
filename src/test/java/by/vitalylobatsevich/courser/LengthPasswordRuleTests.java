@@ -16,7 +16,7 @@ class LengthPasswordRuleTests {
 
     @Test
     void isValid_MoreThan8Length_ShouldReturnTrue() {
-        assertTrue(rule.isValid("12345678"));
+        assertTrue(rule.isValid("123456789"));
     }
 
     @Test

@@ -1,6 +1,6 @@
 package by.vitalylobatsevich.courser;
 
-import by.vitalylobatsevich.courser.application.validation.password.rule.HaveNumberPasswordRule;
+import by.vitalylobatsevich.courser.application.validation.password.rule.HasNumberPasswordRule;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class HaveNumberPasswordRuleTests {
+class HasNumberPasswordRuleTests {
 
-    final HaveNumberPasswordRule rule = new HaveNumberPasswordRule();
+    final HasNumberPasswordRule rule = new HasNumberPasswordRule();
 
     @Test
     void isValid_HasNumber_ShouldReturnTrue() {

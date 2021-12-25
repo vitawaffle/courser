@@ -1,10 +1,10 @@
 package by.vitalylobatsevich.courser.application.validation.password.rule;
 
-public class HaveNumberPasswordRule implements PasswordRule {
+public class HasBigLetterPasswordRule implements PasswordRule {
 
     @Override
     public boolean isValid(final String value) {
-        return value.matches(".*[0-9].*");
+        return value.matches(".*[A-ZА-Я].*");
     }
 
 }

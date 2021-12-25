@@ -52,17 +52,17 @@ public class PropertiesPasswordValidationConfigurator extends PasswordValidation
     }
 
     @Override
-    protected Optional<Boolean> isHaveBigLetterActive() {
+    protected Optional<Boolean> isHasBigLetterActive() {
         return getBooleanRuleActivation("password.has-big-letter");
     }
 
     @Override
-    protected Optional<Boolean> isHaveSmallLetterActive() {
+    protected Optional<Boolean> isHasSmallLetterActive() {
         return getBooleanRuleActivation("password.has-small-letter");
     }
 
     @Override
-    protected Optional<Boolean> isHaveNumberActive() {
+    protected Optional<Boolean> isHasNumberActive() {
         return getBooleanRuleActivation("password.has-number");
     }
 

@@ -13,7 +13,7 @@ import java.util.Collections;
 @Data
 public class User extends LongIdEntity {
 
-    private String username;
+    private String email;
 
     private String password;
 

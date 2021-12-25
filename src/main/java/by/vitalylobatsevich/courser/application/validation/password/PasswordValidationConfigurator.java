@@ -12,28 +12,28 @@ public abstract class PasswordValidationConfigurator {
 
     protected abstract Optional<Integer> getMinimalLength();
 
-    protected abstract Optional<Boolean> isHaveBigLetterActive();
+    protected abstract Optional<Boolean> isHasBigLetterActive();
 
-    protected abstract Optional<Boolean> isHaveSmallLetterActive();
+    protected abstract Optional<Boolean> isHasSmallLetterActive();
 
-    protected abstract Optional<Boolean> isHaveNumberActive();
+    protected abstract Optional<Boolean> isHasNumberActive();
 
     public Collection<PasswordRule> getActiveRules() {
         val activeRules = new ArrayList<PasswordRule>();
         getMinimalLength().ifPresent(minimalLength -> activeRules.add(new LengthPasswordRule(minimalLength)));
-        isHaveBigLetterActive().ifPresent(isHaveBigLetterActive -> {
+        isHasBigLetterActive().ifPresent(isHaveBigLetterActive -> {
             if (isHaveBigLetterActive) {
-                activeRules.add(new HaveBigLetterPasswordRule());
+                activeRules.add(new HasBigLetterPasswordRule());
             }
         });
-        isHaveSmallLetterActive().ifPresent(isHaveSmallLetterActive -> {
+        isHasSmallLetterActive().ifPresent(isHaveSmallLetterActive -> {
             if (isHaveSmallLetterActive) {
-                activeRules.add(new HaveSmallLetterPasswordRule());
+                activeRules.add(new HasSmallLetterPasswordRule());
             }
         });
-        isHaveNumberActive().ifPresent(isHaveNumberActive -> {
+        isHasNumberActive().ifPresent(isHaveNumberActive -> {
             if (isHaveNumberActive) {
-                activeRules.add(new HaveNumberPasswordRule());
+                activeRules.add(new HasNumberPasswordRule());
             }
         });
         return activeRules;

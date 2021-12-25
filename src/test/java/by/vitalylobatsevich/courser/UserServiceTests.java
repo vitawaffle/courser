@@ -31,7 +31,7 @@ class UserServiceTests {
     
     UserFactory userFactory = new UserFactoryImpl();
     
-    String existingUsername = "TestUser1";
+    String existingEmail = "TestUser1";
 
     @BeforeEach
     void setUp() {
@@ -55,7 +55,7 @@ class UserServiceTests {
                 .when(userRepository)
                 .deleteById(0L);
         Mockito.lenient()
-                .when(userRepository.existsByUsername(existingUsername))
+                .when(userRepository.existsByEmail(existingEmail))
                 .thenReturn(true);
     }
 
@@ -85,8 +85,8 @@ class UserServiceTests {
     }
 
     @Test
-    void existsByName_ExistingName_ShouldReturnTrue() {
-        assertTrue(testedService.existsByUsername(existingUsername));
+    void existsByEmail_ExistingEmail_ShouldReturnTrue() {
+        assertTrue(testedService.existsByEmail(existingEmail));
     }
 
 }

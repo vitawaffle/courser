@@ -1,6 +1,6 @@
 package by.vitalylobatsevich.courser.application.validation.password.rule;
 
-public class HaveSmallLetterPasswordRule implements PasswordRule {
+public class HasSmallLetterPasswordRule implements PasswordRule {
 
     @Override
     public boolean isValid(final String value) {

@@ -5,6 +5,7 @@ import by.vitalylobatsevich.courser.factory.UserFactory;
 import by.vitalylobatsevich.courser.factory.implementation.UserFactoryImpl;
 
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -49,8 +50,8 @@ class UserRepositoryTests {
     }
 
     @Test
-    void existsByUsername_ExistingUsername_ShouldReturnTrue() {
-        assertTrue(testedRepository.existsByUsername("TestUser1"));
+    void existsByEmail_ExistingEmail_ShouldReturnTrue() {
+        assertTrue(testedRepository.existsByEmail("TestUser1"));
     }
 
 }

@@ -4,6 +4,6 @@ import by.vitalylobatsevich.courser.database.entity.User;
 
 public interface UserService extends CollectionService<User, Long> {
 
-    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 
 }

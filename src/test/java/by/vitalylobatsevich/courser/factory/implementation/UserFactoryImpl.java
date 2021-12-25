@@ -10,7 +10,7 @@ public class UserFactoryImpl implements UserFactory {
     @Override
     public User createValidEntity() {
         val user = new User();
-        user.setUsername("ValidUsername");
+        user.setEmail("ValidUsername");
         user.setPassword("$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6");
         return user;
     }
@@ -18,7 +18,7 @@ public class UserFactoryImpl implements UserFactory {
     @Override
     public User createEntityWithExistingId() {
         val user = new User();
-        user.setUsername("TestUser1");
+        user.setEmail("TestUser1");
         user.setPassword("$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6");
         return user;
     }

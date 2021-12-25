@@ -2,6 +2,7 @@ package by.vitalylobatsevich.courser.configuration;
 
 import by.vitalylobatsevich.courser.application.validation.password.PasswordValidationConfigurator;
 import by.vitalylobatsevich.courser.application.validation.password.PropertiesPasswordValidationConfigurator;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +12,11 @@ public class ValidationConfiguration {
     @Bean
     public PasswordValidationConfigurator passwordValidationConfigurator() {
         return new PropertiesPasswordValidationConfigurator("classpath:validation.properties");
+    }
+
+    @Bean
+    public EmailValidator emailValidator() {
+        return EmailValidator.getInstance();
     }
 
 }

@@ -15,6 +15,24 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="insert_default_roles" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="default">
+        <insert tableName="roles">
+            <column name="name" value="STUDENT" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="TEACHER" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="MODERATOR" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ADMIN" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="DEVELOPER" />
+        </insert>
+    </changeSet>
+
     <changeSet id="create_users_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="default">
         <createTable tableName="users">
             <column name="id" type="bigint" autoIncrement="true">

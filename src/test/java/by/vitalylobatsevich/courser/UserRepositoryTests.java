@@ -54,4 +54,9 @@ class UserRepositoryTests {
         assertTrue(testedRepository.existsByEmail("TestUser1"));
     }
 
+    @Test
+    void findByEmail_ExistingEmail_ShouldReturnNotEmpty() {
+        assertFalse(testedRepository.findByEmail("TestUser1").isEmpty());
+    }
+
 }

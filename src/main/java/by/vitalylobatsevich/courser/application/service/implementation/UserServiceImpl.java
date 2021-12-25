@@ -4,13 +4,13 @@ import by.vitalylobatsevich.courser.application.service.UserService;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
 
+import io.vavr.collection.Seq;
+import io.vavr.control.Option;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +19,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Streamable<User> getAll() {
+    public Seq<User> getAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public Optional<User> getById(final Long id) {
+    public Option<User> getById(final Long id) {
         return userRepository.findById(id);
     }
 

@@ -3,7 +3,9 @@ package by.vitalylobatsevich.courser;
 import by.vitalylobatsevich.courser.database.repository.RoleRepository;
 import by.vitalylobatsevich.courser.factory.RoleFactory;
 import by.vitalylobatsevich.courser.factory.implementation.RoleFactoryImpl;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

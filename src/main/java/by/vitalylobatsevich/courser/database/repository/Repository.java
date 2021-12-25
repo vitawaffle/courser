@@ -2,17 +2,17 @@ package by.vitalylobatsevich.courser.database.repository;
 
 import by.vitalylobatsevich.courser.database.entity.Entity;
 
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.util.Streamable;
+import io.vavr.collection.Seq;
+import io.vavr.control.Option;
 
-import java.util.Optional;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface Repository<T extends Entity, ID> extends org.springframework.data.repository.Repository<T, ID> {
 
-    Optional<T> findById(ID id);
+    Option<T> findById(ID id);
 
-    Streamable<T> findAll();
+    Seq<T> findAll();
 
     T save(T t);
 

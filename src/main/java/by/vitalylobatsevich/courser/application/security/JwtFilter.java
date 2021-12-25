@@ -2,8 +2,8 @@ package by.vitalylobatsevich.courser.application.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import lombok.val;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +14,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
                 token = authorizationHeader.substring(7);
             }
+
             if (token != null && jwtUtils.validate(token)) {
                 val userDetails= userDetailsService.loadUserByUsername(
                         jwtUtils.getUsernameFromToken(token)
@@ -49,6 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (final Exception exception) {
             log.error("Cannot authenticate user: {}", exception.getMessage());
         }
+
         filterChain.doFilter(request, response);
     }
 

@@ -2,36 +2,37 @@ package by.vitalylobatsevich.courser.application.validation.password;
 
 import by.vitalylobatsevich.courser.application.validation.password.rule.*;
 
+import io.vavr.control.Option;
+
 import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 public abstract class PasswordValidationConfigurator {
 
-    protected abstract Optional<Integer> getMinimalLength();
+    protected abstract Option<Integer> getMinimalLength();
 
-    protected abstract Optional<Boolean> isHasBigLetterActive();
+    protected abstract Option<Boolean> isHasBigLetterActive();
 
-    protected abstract Optional<Boolean> isHasSmallLetterActive();
+    protected abstract Option<Boolean> isHasSmallLetterActive();
 
-    protected abstract Optional<Boolean> isHasNumberActive();
+    protected abstract Option<Boolean> isHasNumberActive();
 
     public Collection<PasswordRule> getActiveRules() {
         val activeRules = new ArrayList<PasswordRule>();
-        getMinimalLength().ifPresent(minimalLength -> activeRules.add(new LengthPasswordRule(minimalLength)));
-        isHasBigLetterActive().ifPresent(isHaveBigLetterActive -> {
+        getMinimalLength().peek(minimalLength -> activeRules.add(new LengthPasswordRule(minimalLength)));
+        isHasBigLetterActive().peek(isHaveBigLetterActive -> {
             if (isHaveBigLetterActive) {
                 activeRules.add(new HasBigLetterPasswordRule());
             }
         });
-        isHasSmallLetterActive().ifPresent(isHaveSmallLetterActive -> {
+        isHasSmallLetterActive().peek(isHaveSmallLetterActive -> {
             if (isHaveSmallLetterActive) {
                 activeRules.add(new HasSmallLetterPasswordRule());
             }
         });
-        isHasNumberActive().ifPresent(isHaveNumberActive -> {
+        isHasNumberActive().peek(isHaveNumberActive -> {
             if (isHaveNumberActive) {
                 activeRules.add(new HasNumberPasswordRule());
             }

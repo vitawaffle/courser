@@ -2,15 +2,14 @@ package by.vitalylobatsevich.courser.application.service;
 
 import by.vitalylobatsevich.courser.database.entity.Entity;
 
-import org.springframework.data.util.Streamable;
-
-import java.util.Optional;
+import io.vavr.collection.Seq;
+import io.vavr.control.Option;
 
 public interface CollectionService<T extends Entity, ID> extends Service {
 
-    Streamable<T> getAll();
+    Seq<T> getAll();
 
-    Optional<T> getById(ID id);
+    Option<T> getById(ID id);
 
     T save(T t);
 

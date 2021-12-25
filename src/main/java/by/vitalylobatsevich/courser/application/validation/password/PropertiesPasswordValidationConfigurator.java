@@ -1,13 +1,15 @@
 package by.vitalylobatsevich.courser.application.validation.password;
 
+import io.vavr.control.Option;
+
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+
 import org.springframework.util.ResourceUtils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.Properties;
 
 @Slf4j
@@ -17,8 +19,9 @@ public class PropertiesPasswordValidationConfigurator extends PasswordValidation
 
     public PropertiesPasswordValidationConfigurator(final String pathToPropertyFile) {
         try {
-            validationProperties.load(
-                    new FileInputStream(ResourceUtils.getFile(pathToPropertyFile)));
+            validationProperties.load(new FileInputStream(
+                    ResourceUtils.getFile(pathToPropertyFile)
+            ));
         } catch (final FileNotFoundException exception) {
             log.error("File validation.properties is not found", exception);
         } catch (final IOException exception) {
@@ -27,42 +30,42 @@ public class PropertiesPasswordValidationConfigurator extends PasswordValidation
     }
 
     @Override
-    protected Optional<Integer> getMinimalLength() {
+    protected Option<Integer> getMinimalLength() {
         val minimalLengthProperty = validationProperties.getProperty("password.minimal-length");
         if (minimalLengthProperty != null) {
             try {
-                return Optional.of(Integer.parseInt(minimalLengthProperty));
+                return Option.of(Integer.parseInt(minimalLengthProperty));
             } catch (final NumberFormatException exception) {
                 log.error("Property password.minimal-length should be a valid number");
             }
         }
-        return Optional.empty();
+        return Option.none();
     }
 
-    private Optional<Boolean> getBooleanRuleActivation(final String propertyKey) {
+    private Option<Boolean> getBooleanRuleActivation(final String propertyKey) {
         val isRuleActive = validationProperties.getProperty(propertyKey);
         if (isRuleActive == null) {
-            return Optional.empty();
+            return Option.none();
         }
         if (!isRuleActive.equals("true") && !isRuleActive.equals("false")) {
             log.error("Property " + propertyKey + " should be true or false");
-            return Optional.empty();
+            return Option.none();
         }
-        return Optional.of(isRuleActive.equals("true"));
+        return Option.of(isRuleActive.equals("true"));
     }
 
     @Override
-    protected Optional<Boolean> isHasBigLetterActive() {
+    protected Option<Boolean> isHasBigLetterActive() {
         return getBooleanRuleActivation("password.has-big-letter");
     }
 
     @Override
-    protected Optional<Boolean> isHasSmallLetterActive() {
+    protected Option<Boolean> isHasSmallLetterActive() {
         return getBooleanRuleActivation("password.has-small-letter");
     }
 
     @Override
-    protected Optional<Boolean> isHasNumberActive() {
+    protected Option<Boolean> isHasNumberActive() {
         return getBooleanRuleActivation("password.has-number");
     }
 

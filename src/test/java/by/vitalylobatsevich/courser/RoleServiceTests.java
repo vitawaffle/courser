@@ -5,16 +5,19 @@ import by.vitalylobatsevich.courser.application.service.implementation.RoleServi
 import by.vitalylobatsevich.courser.database.repository.RoleRepository;
 import by.vitalylobatsevich.courser.factory.RoleFactory;
 import by.vitalylobatsevich.courser.factory.implementation.RoleFactoryImpl;
+
+import io.vavr.collection.List;
+import io.vavr.control.Option;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.util.Streamable;
 
-import java.util.Optional;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,10 +39,10 @@ class RoleServiceTests {
 
         Mockito.lenient()
                 .when(roleRepository.findAll())
-                .thenReturn(Streamable.of(roleFactory.createEntityWithExistingId()));
+                .thenReturn(List.of(roleFactory.createEntityWithExistingId()));
         Mockito.lenient()
                 .when(roleRepository.findById(1L))
-                .thenReturn(Optional.of(roleFactory.createEntityWithExistingId()));
+                .thenReturn(Option.of(roleFactory.createEntityWithExistingId()));
         Mockito.lenient()
                 .when(roleRepository.save(roleFactory.createValidEntity()))
                 .thenReturn(roleFactory.createValidEntity());

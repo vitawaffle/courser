@@ -6,6 +6,9 @@ import by.vitalylobatsevich.courser.database.repository.UserRepository;
 import by.vitalylobatsevich.courser.factory.UserFactory;
 import by.vitalylobatsevich.courser.factory.implementation.UserFactoryImpl;
 
+import io.vavr.collection.List;
+import io.vavr.control.Option;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +18,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.util.Streamable;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,10 +39,10 @@ class UserServiceTests {
 
         Mockito.lenient()
                 .when(userRepository.findAll())
-                .thenReturn(Streamable.of(userFactory.createEntityWithExistingId()));
+                .thenReturn(List.of(userFactory.createEntityWithExistingId()));
         Mockito.lenient()
                 .when(userRepository.findById(1L))
-                .thenReturn(Optional.of(userFactory.createEntityWithExistingId()));
+                .thenReturn(Option.of(userFactory.createEntityWithExistingId()));
         Mockito.lenient()
                 .when(userRepository.save(userFactory.createValidEntity()))
                 .thenReturn(userFactory.createValidEntity());

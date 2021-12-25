@@ -4,13 +4,13 @@ import by.vitalylobatsevich.courser.application.service.RoleService;
 import by.vitalylobatsevich.courser.database.entity.Role;
 import by.vitalylobatsevich.courser.database.repository.RoleRepository;
 
+import io.vavr.collection.Seq;
+import io.vavr.control.Option;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +19,12 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public Streamable<Role> getAll() {
+    public Seq<Role> getAll() {
         return roleRepository.findAll();
     }
 
     @Override
-    public Optional<Role> getById(final Long id) {
+    public Option<Role> getById(final Long id) {
         return roleRepository.findById(id);
     }
 

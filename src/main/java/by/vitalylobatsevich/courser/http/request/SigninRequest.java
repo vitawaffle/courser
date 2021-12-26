@@ -3,6 +3,7 @@ package by.vitalylobatsevich.courser.http.request;
 import by.vitalylobatsevich.courser.application.validation.Email;
 import by.vitalylobatsevich.courser.application.validation.Password;
 
+import by.vitalylobatsevich.courser.application.validation.UniqueEmail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class SigninRequest extends Request {
 
     @NotBlank(message = "{validation.not-blank}")
     @Email(message = "{validation.email}")
+    @UniqueEmail(message = "{validation.unique-email}")
     private String email;
 
     @NotBlank(message = "{validation.not-blank}")

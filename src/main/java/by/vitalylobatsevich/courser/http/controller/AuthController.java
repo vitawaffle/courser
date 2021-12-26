@@ -4,10 +4,12 @@ import by.vitalylobatsevich.courser.application.service.AuthService;
 
 import by.vitalylobatsevich.courser.http.request.LoginRequest;
 import by.vitalylobatsevich.courser.http.request.SigninRequest;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -19,8 +21,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public String signin(@RequestBody @Valid final SigninRequest signinRequest) {
-        return authService.signin(signinRequest);
+    public String signin(@RequestBody @Valid final SigninRequest signinRequest, final HttpServletRequest request) {
+        return authService.signin(signinRequest, request.getLocale());
     }
 
     @PostMapping("/login")

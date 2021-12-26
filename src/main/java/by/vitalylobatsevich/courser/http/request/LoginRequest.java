@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class LoginRequest extends Request {
 
-    @NotNull
+    @NotNull(message = "{validation.not-null}")
     private String email;
 
-    @NotNull
+    @NotNull(message = "{validation.not-null}")
     private String password;
 
     public LoginRequest(final SigninRequest signinRequest) {

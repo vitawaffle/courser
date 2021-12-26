@@ -14,12 +14,12 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class SigninRequest extends Request {
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "{validation.not-blank}")
+    @Email(message = "{validation.email}")
     private String email;
 
-    @NotBlank
-    @Password
+    @NotBlank(message = "{validation.not-blank}")
+    @Password(message = "{validation.password}")
     private String password;
 
 }

@@ -12,3 +12,4 @@ logging.file.name=log/application.log
 
 courser.security.jwt.secret=<jwt-generation-secret-key>
 courser.security.jwt.lifetime=<jwt_token_lifetime>
+courser.default-language=<en|ru>

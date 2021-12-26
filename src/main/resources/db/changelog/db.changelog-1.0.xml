@@ -61,5 +61,27 @@
         </createTable>
         <addPrimaryKey tableName="users_roles" columnNames="user_id, role_id" />
     </changeSet>
+    
+    <changeSet id="create_email_confirmation_tokens_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)"
+               context="default">
+        <createTable tableName="email_confirmation_tokens">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="token" type="text">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" unique="true" referencedTableName="users" referencedColumnNames="id"
+                             foreignKeyName="email_confirmation_tokens_user_id_fk" />
+            </column>
+            <column name="expiration_date" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="can_be_resend" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>

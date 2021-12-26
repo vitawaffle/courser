@@ -31,4 +31,14 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_test_email_confirmation_tokens" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)"
+               context="test">
+        <insert tableName="email_confirmation_tokens">
+            <column name="token" value="TestToken1" />
+            <column name="user_id" value="1" />
+            <column name="expiration_date" valueComputed="current_timestamp" />
+            <column name="can_be_resend" valueComputed="current_timestamp" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

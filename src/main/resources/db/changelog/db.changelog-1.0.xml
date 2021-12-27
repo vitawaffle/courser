@@ -44,6 +44,7 @@
             <column name="password" type="text">
                 <constraints nullable="false" />
             </column>
+            <column name="email_confirmed_at" type="timestamp" />
         </createTable>
     </changeSet>
 

@@ -4,7 +4,6 @@ import by.vitalylobatsevich.courser.application.validation.Password;
 import by.vitalylobatsevich.courser.application.validation.password.PasswordValidationConfigurator;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -16,12 +15,9 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
     @Override
     public boolean isValid(final String value, final ConstraintValidatorContext context) {
-        for (val passwordRule : passwordValidationConfigurator.getActiveRules()) {
-            if (!passwordRule.isValid(value)) {
-                return false;
-            }
-        }
-        return true;
+        return passwordValidationConfigurator.getActiveRules()
+                .filter(rule -> !rule.isValid(value))
+                .isEmpty();
     }
 
 }

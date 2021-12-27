@@ -1,7 +1,6 @@
 package by.vitalylobatsevich.courser.http.controller;
 
 import by.vitalylobatsevich.courser.application.service.AuthService;
-
 import by.vitalylobatsevich.courser.http.request.LoginRequest;
 import by.vitalylobatsevich.courser.http.request.SigninRequest;
 
@@ -21,7 +20,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public String signin(@RequestBody @Valid final SigninRequest signinRequest, final HttpServletRequest request) {
+    public String signin(
+            @RequestBody @Valid final SigninRequest signinRequest,
+            final HttpServletRequest request
+    ) {
         return authService.signin(signinRequest, request.getLocale());
     }
 

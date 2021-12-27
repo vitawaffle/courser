@@ -59,8 +59,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .authorizeRequests(authorizeRequestsCustomizer -> authorizeRequestsCustomizer
                         .antMatchers(
+                                "/css/**",
+                                "/js/**",
+                                "/img/**",
+                                "/",
+                                "/error",
                                 "/api/auth/login",
-                                "/api/auth/signin"
+                                "/api/auth/signin",
+                                "/api/email-confirmation/confirm",
+                                "/api/email-confirmation/resend"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

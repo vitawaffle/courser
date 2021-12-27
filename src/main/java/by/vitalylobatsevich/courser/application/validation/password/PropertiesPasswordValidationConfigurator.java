@@ -19,9 +19,7 @@ public class PropertiesPasswordValidationConfigurator extends PasswordValidation
 
     public PropertiesPasswordValidationConfigurator(final String pathToPropertyFile) {
         try {
-            validationProperties.load(new FileInputStream(
-                    ResourceUtils.getFile(pathToPropertyFile)
-            ));
+            validationProperties.load(new FileInputStream(ResourceUtils.getFile(pathToPropertyFile)));
         } catch (final FileNotFoundException exception) {
             log.error("File validation.properties is not found", exception);
         } catch (final IOException exception) {

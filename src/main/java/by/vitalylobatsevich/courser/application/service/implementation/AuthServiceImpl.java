@@ -38,17 +38,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String signin(final SigninRequest signinRequest, final Locale locale) {
-        val studentRole = new Role();
-        studentRole.setId(1L);
-
-        var user = new User();
-        user.setEmail(signinRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(signinRequest.getPassword()));
-        user.setRoles(Arrays.asList(studentRole));
-
-        user = userRepository.save(user);
-
-        applicationEventPublisher.publishEvent(new SigninEvent(locale, user));
+        applicationEventPublisher.publishEvent(new SigninEvent(locale, userRepository.save(new User(
+                null,
+                signinRequest.getEmail(),
+                passwordEncoder.encode(signinRequest.getPassword()),
+                Arrays.asList(new Role(1L)),
+                null
+        ))));
 
         return login(new LoginRequest(signinRequest));
     }

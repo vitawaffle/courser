@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{email-confirmation.email.subject}"></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+    body {
+        font-family: 'Roboto Slab', serif;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container_bg_dark {
+        background-color: #001a4d;
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .justify-content-center {
+        justify-content: center;
+    }
+
+    .padding-10px {
+        padding: 10px;
+    }
+
+    .text_color_light {
+        color: #ffffff;
+    }
+
+    .text_color_grey {
+        color: #e6e6e6;
+    }
+
+    .text_color_darkgrey {
+        color: #808080;
+    }
+
+    .verification-link {
+        text-decoration: none;
+        color: #ffffff;
+        background-color: #1a1aff;
+        border: 2px solid #3333ff;
+        padding: 10px;
+    }
+    .verification-link:hover {
+        background-color: #0000ff;
+    }
+    .verification-link:active: {
+        background-color: #0000e6;
+    }
+</style>
+
+<div class="container container_bg_dark padding-10px">
+    <div class="row justify-content-center">
+        <h1 th:text="#{email-confirmation.email.welcome}" class="text_color_grey"></h1>
+    </div>
+    <div class="row justify-content-center">
+        <p th:text="#{email-confirmation.email.body}" class="text_color_grey"></p>
+    </div>
+    <div class="row justify-content-center">
+        <p th:text="#{email-confirmation.email.message}" class="text_color_light"></p>
+    </div>
+    <div class="row justify-content-center">
+        <a th:href="${emailConfirmationUrl}"
+           th:text="#{email-confirmation.email.confirm}"
+           class="verification-link"></a>
+    </div>
+    <div class="row justify-content-center">
+        <p th:text="#{email-confirmation.email.author}" class="text_color_darkgrey"></p>
+    </div>
+</div>
+</body>
+</html>

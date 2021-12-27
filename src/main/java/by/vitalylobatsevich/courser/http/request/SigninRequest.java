@@ -2,8 +2,8 @@ package by.vitalylobatsevich.courser.http.request;
 
 import by.vitalylobatsevich.courser.application.validation.Email;
 import by.vitalylobatsevich.courser.application.validation.Password;
-
 import by.vitalylobatsevich.courser.application.validation.UniqueEmail;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

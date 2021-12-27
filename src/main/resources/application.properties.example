@@ -7,9 +7,17 @@ spring.liquibase.contexts=[default|test]
 
 spring.thymeleaf.cache=false
 
+spring.mail.host=<mail-server-host>
+spring.mail.port=<mail-server-port>
+spring.mail.username=<mail-username>
+spring.mail.password=<mail-password>
+
 logging.level.root=INFO
 logging.file.name=log/application.log
 
 courser.security.jwt.secret=<jwt-generation-secret-key>
-courser.security.jwt.lifetime=<jwt_token_lifetime>
+courser.security.jwt.lifetime=<jwt-token-lifetime>
 courser.default-language=<en|ru>
+courser.email-confirmation.token.lifetime=<your-value>
+courser.email-confirmation.token.resend-delay=<your-value>
+courser.application-url=<application-url>

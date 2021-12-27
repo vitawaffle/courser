@@ -2,12 +2,9 @@ package by.vitalylobatsevich.courser.application.validation.password;
 
 import by.vitalylobatsevich.courser.application.validation.password.rule.*;
 
+import io.vavr.collection.HashSet;
+import io.vavr.collection.Set;
 import io.vavr.control.Option;
-
-import lombok.val;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public abstract class PasswordValidationConfigurator {
 
@@ -19,25 +16,19 @@ public abstract class PasswordValidationConfigurator {
 
     protected abstract Option<Boolean> isHasNumberActive();
 
-    public Collection<PasswordRule> getActiveRules() {
-        val activeRules = new ArrayList<PasswordRule>();
-        getMinimalLength().peek(minimalLength -> activeRules.add(new LengthPasswordRule(minimalLength)));
-        isHasBigLetterActive().peek(isHaveBigLetterActive -> {
-            if (isHaveBigLetterActive) {
-                activeRules.add(new HasBigLetterPasswordRule());
-            }
-        });
-        isHasSmallLetterActive().peek(isHaveSmallLetterActive -> {
-            if (isHaveSmallLetterActive) {
-                activeRules.add(new HasSmallLetterPasswordRule());
-            }
-        });
-        isHasNumberActive().peek(isHaveNumberActive -> {
-            if (isHaveNumberActive) {
-                activeRules.add(new HasNumberPasswordRule());
-            }
-        });
-        return activeRules;
+    public Set<PasswordRule> getActiveRules() {
+        return HashSet.of(
+                getMinimalLength().map(LengthPasswordRule::new),
+                isHasBigLetterActive()
+                        .filter(isHasBigLetterActive -> isHasBigLetterActive)
+                        .map(isHasBigLetterActive -> new HasBigLetterPasswordRule()),
+                isHasSmallLetterActive()
+                        .filter(isHasSmallLetterActive -> isHasSmallLetterActive)
+                        .map(isHasSmallLetterActive -> new HasSmallLetterPasswordRule()),
+                isHasNumberActive()
+                        .filter(isHasNumberActive -> isHasNumberActive)
+                        .map(isHasNumberActive -> new HasNumberPasswordRule())
+        ).filter(rule -> !rule.isEmpty()).map(Option::get);
     }
 
 }

@@ -12,8 +12,10 @@ import lombok.val;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.servlet.ModelAndView;
@@ -124,6 +126,25 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
         emailConfirmationTokenRepository.delete(emailConfirmationToken.get());
 
         return new ModelAndView("index", model);
+    }
+
+    @Override
+    public ResponseEntity<String> resendConfirmationEmail(final String email, final Locale locale) {
+        val user = userRepository.findByEmail(email)
+                .getOrElseThrow(() -> new UsernameNotFoundException(email));
+        val emailConfirmationToken = emailConfirmationTokenRepository.findByUser(user);
+        if (!emailConfirmationToken.isEmpty()) {
+            if (Instant.now().isBefore(emailConfirmationToken.get().getCanBeResend())) {
+                return ResponseEntity.badRequest().body(messageSource.getMessage(
+                        "email-confirmation.error.can-be-resend",
+                        null,
+                        locale
+                ));
+            }
+            emailConfirmationTokenRepository.delete(emailConfirmationToken.get());
+        }
+        sendConfirmationEmail(user, locale);
+        return ResponseEntity.ok("");
     }
 
 }

@@ -66,8 +66,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                                 "/error",
                                 "/api/auth/login",
                                 "/api/auth/signin",
-                                "/api/email-confirmation/confirm",
-                                "/api/email-confirmation/resend"
+                                "/api/email-confirmation/confirm"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -6,6 +6,7 @@ import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.database.entity.Role;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
+import by.vitalylobatsevich.courser.http.request.ChangePasswordRequest;
 import by.vitalylobatsevich.courser.http.request.LoginRequest;
 import by.vitalylobatsevich.courser.http.request.SigninRequest;
 
@@ -57,6 +58,10 @@ public class AuthServiceImpl implements AuthService {
         ));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return jwtUtils.generate(authentication);
+    }
+
+    @Override
+    public void changePassword(final ChangePasswordRequest changePasswordRequest) {
     }
 
 }

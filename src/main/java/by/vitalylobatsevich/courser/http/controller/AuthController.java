@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.http.controller;
 
 import by.vitalylobatsevich.courser.application.service.AuthService;
+import by.vitalylobatsevich.courser.http.request.ChangePasswordRequest;
 import by.vitalylobatsevich.courser.http.request.LoginRequest;
 import by.vitalylobatsevich.courser.http.request.SigninRequest;
 
@@ -30,6 +31,10 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestBody @Valid final LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("/change-password")
+    public void changePassword(@RequestBody @Valid final ChangePasswordRequest changePasswordRequest) {
     }
 
 }

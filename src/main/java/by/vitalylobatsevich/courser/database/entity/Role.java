@@ -23,4 +23,15 @@ public class Role extends LongIdEntity {
         super(id);
     }
 
+    @Override
+    public Role updateId(final Long id) {
+        super.updateId(id);
+        return this;
+    }
+
+    public Role updateName(final String name) {
+        this.name = name;
+        return this;
+    }
+
 }

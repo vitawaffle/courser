@@ -48,4 +48,30 @@ public class User extends LongIdEntity {
         super(id);
     }
 
+    @Override
+    public User updateId(final Long id) {
+        super.updateId(id);
+        return this;
+    }
+
+    public User updateEmail(final String email) {
+        this.email = email;
+        return this;
+    }
+
+    public User updatePassword(final String password) {
+        this.password = password;
+        return this;
+    }
+
+    public User updateRoles(final Collection<Role> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public User updateEmailConfirmedAt(final Instant emailConfirmedAt) {
+        this.emailConfirmedAt = emailConfirmedAt;
+        return this;
+    }
+
 }

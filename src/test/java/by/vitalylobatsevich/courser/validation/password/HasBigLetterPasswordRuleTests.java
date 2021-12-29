@@ -1,4 +1,4 @@
-package by.vitalylobatsevich.courser;
+package by.vitalylobatsevich.courser.validation.password;
 
 import by.vitalylobatsevich.courser.application.validation.password.rule.HasBigLetterPasswordRule;
 
@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 class HasBigLetterPasswordRuleTests {
@@ -16,6 +17,11 @@ class HasBigLetterPasswordRuleTests {
     @Test
     void isValid_HasBigLetter_ShouldReturnTrue() {
         assertTrue(rule.isValid("Testvalue"));
+    }
+
+    @Test
+    void isValid_HasNoBigLetter_ShouldReturnFalse() {
+        assertFalse(rule.isValid("testvalue"));
     }
 
 }

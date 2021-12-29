@@ -18,23 +18,26 @@
 
     <changeSet id="insert_test_users" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="test">
         <insert tableName="users">
-            <column name="email" value="TestUser1" />
-            <column name="password" value="$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6" />
+            <column name="email" value="test.email1@test.org" />
+            <!-- TestPassword1 -->
+            <column name="password" value="$2a$10$G.q3/6wTU.eu9nBmSpFYIe0Vdo6zhhV2XblICi5mnN7VtsffiDH2q" />
         </insert>
         <insert tableName="users">
-            <column name="email" value="TestUser2" />
-            <column name="password" value="$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6" />
+            <column name="email" value="test.email2@test.org" />
+            <!-- TestPassword2 -->
+            <column name="password" value="$2a$10$aOQ4xMtre4P38mWBd7zcqe3tSb5ZQVfOEoVhWUlgoZmhCautqmwqW" />
         </insert>
         <insert tableName="users">
-            <column name="email" value="TestUser3" />
-            <column name="password" value="$2a$10$QXpsri3rlTeo.BlbIDpAZOhHo5pZEI.Sw.pg9Ts7hjU.YQ.8nCM6" />
+            <column name="email" value="test.email3@test.org" />
+            <!-- TestPassword3 -->
+            <column name="password" value="$2a$10$h/mb1.QHu/IXyYLJC5hvAuYviBI6cNh6ZpEnEzEU.TyJhvBGsBP6u" />
         </insert>
     </changeSet>
 
     <changeSet id="insert_test_email_confirmation_tokens" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)"
                context="test">
         <insert tableName="email_confirmation_tokens">
-            <column name="token" value="TestToken1" />
+            <column name="token" value="0aa0f472-a757-407e-b5af-131ff8d6c8a9" />
             <column name="user_id" value="1" />
             <column name="expiration_date" valueComputed="current_timestamp" />
             <column name="can_be_resend" valueComputed="current_timestamp" />

@@ -1,4 +1,4 @@
-package by.vitalylobatsevich.courser;
+package by.vitalylobatsevich.courser.validation.password;
 
 import by.vitalylobatsevich.courser.application.validation.password.rule.LengthPasswordRule;
 

@@ -1,7 +1,8 @@
-package by.vitalylobatsevich.courser;
+package by.vitalylobatsevich.courser.service;
 
 import by.vitalylobatsevich.courser.application.service.RoleService;
 import by.vitalylobatsevich.courser.application.service.implementation.RoleServiceImpl;
+import by.vitalylobatsevich.courser.database.entity.Role;
 import by.vitalylobatsevich.courser.database.repository.RoleRepository;
 import by.vitalylobatsevich.courser.factory.RoleFactory;
 import by.vitalylobatsevich.courser.factory.implementation.RoleFactoryImpl;
@@ -24,28 +25,29 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class RoleServiceTests {
 
-    RoleService testedService;
+    RoleService roleService;
 
     @Mock
     RoleRepository roleRepository;
 
     RoleFactory roleFactory = new RoleFactoryImpl();
 
-    String existingName = "TEST_ROLE_1";
-
     @BeforeEach
     void setUp() {
-        testedService = new RoleServiceImpl(roleRepository);
+        roleService = new RoleServiceImpl(roleRepository);
 
         Mockito.lenient()
                 .when(roleRepository.findAll())
-                .thenReturn(List.of(roleFactory.createEntityWithExistingId()));
+                .thenReturn(List.of(new Role(1L)));
         Mockito.lenient()
                 .when(roleRepository.findById(1L))
-                .thenReturn(Option.of(roleFactory.createEntityWithExistingId()));
+                .thenReturn(Option.of(new Role(1L)));
+        Mockito.lenient()
+                .when(roleRepository.findById(0L))
+                .thenReturn(Option.none());
         Mockito.lenient()
                 .when(roleRepository.save(roleFactory.createValidEntity()))
-                .thenReturn(roleFactory.createValidEntity());
+                .thenReturn(new Role(1L));
         Mockito.lenient()
                 .doNothing()
                 .when(roleRepository)
@@ -55,38 +57,51 @@ class RoleServiceTests {
                 .when(roleRepository)
                 .deleteById(0L);
         Mockito.lenient()
-                .when(roleRepository.existsByName(existingName))
+                .when(roleRepository.existsByName("TEST_ROLE_1"))
                 .thenReturn(true);
+        Mockito.lenient()
+                .when(roleRepository.existsByName(""))
+                .thenReturn(false);
     }
 
     @Test
     void getAll_ShouldReturnNotEmpty() {
-        assertFalse(testedService.getAll().isEmpty());
+        assertFalse(roleService.getAll().isEmpty());
     }
 
     @Test
     void getById_ExistingId_ShouldReturnNotEmpty() {
-        assertFalse(testedService.getById(1L).isEmpty());
+        assertFalse(roleService.getById(1L).isEmpty());
+    }
+
+    @Test
+    void getById_NotExistingId_ShouldReturnEmpty() {
+        assertTrue(roleService.getById(0L).isEmpty());
     }
 
     @Test
     void save_ValidEntity_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> testedService.save(roleFactory.createValidEntity()));
+        assertDoesNotThrow(() -> roleService.save(roleFactory.createValidEntity()));
     }
 
     @Test
     void deleteById_ExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> testedService.deleteById(1L));
+        assertDoesNotThrow(() -> roleService.deleteById(1L));
     }
 
     @Test
     void deleteById_NotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> testedService.deleteById(0L));
+        assertDoesNotThrow(() -> roleService.deleteById(0L));
     }
 
     @Test
     void existsByName_ExistingName_ShouldReturnTrue() {
-        assertTrue(testedService.existsByName(existingName));
+        assertTrue(roleService.existsByName("TEST_ROLE_1"));
+    }
+
+    @Test
+    void existsByName_NotExistingName_ShouldReturnFalse() {
+        assertFalse(roleService.existsByName(""));
     }
 
 }

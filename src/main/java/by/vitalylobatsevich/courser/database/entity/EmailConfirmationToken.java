@@ -42,4 +42,30 @@ public class EmailConfirmationToken extends LongIdEntity {
         super(id);
     }
 
+    @Override
+    public EmailConfirmationToken updateId(final Long id) {
+        super.updateId(id);
+        return this;
+    }
+
+    public EmailConfirmationToken updateToken(final String token) {
+        this.token = token;
+        return this;
+    }
+
+    public EmailConfirmationToken updateUser(final User user) {
+        this.user = user;
+        return this;
+    }
+
+    public EmailConfirmationToken updateExpirationDate(final Instant expirationDate) {
+        this.expirationDate = expirationDate;
+        return this;
+    }
+
+    public EmailConfirmationToken updateCanBeResend(final Instant canBeResend) {
+        this.canBeResend = canBeResend;
+        return this;
+    }
+
 }

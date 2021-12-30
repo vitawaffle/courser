@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -67,6 +68,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                                 "/api/auth/login",
                                 "/api/auth/signin",
                                 "/api/email-confirmation/confirm"
+                        ).permitAll()
+                        .antMatchers(
+                                HttpMethod.GET,
+                                "/api/configuration/password-rules"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

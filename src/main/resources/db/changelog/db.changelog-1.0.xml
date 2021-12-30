@@ -85,4 +85,20 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_uploaded_files_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)"
+               context="test">
+        <createTable tableName="uploaded_files">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="path" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints referencedTableName="users" referencedColumnNames="id"
+                             foreignKeyName="uploaded_files_user_id_fk" />
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

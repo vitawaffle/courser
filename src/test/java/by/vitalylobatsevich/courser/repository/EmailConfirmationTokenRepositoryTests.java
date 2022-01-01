@@ -50,7 +50,10 @@ class EmailConfirmationTokenRepositoryTests {
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
         assertThrows(Exception.class, () -> emailConfirmationTokenRepository.save(
-                emailConfirmationTokenFactory.createValidEntity().updateToken(null)
+                emailConfirmationTokenFactory.createValidEntity()
+                        .emailConfirmationTokenUpdater()
+                        .token(null)
+                        .update()
         ));
     }
 

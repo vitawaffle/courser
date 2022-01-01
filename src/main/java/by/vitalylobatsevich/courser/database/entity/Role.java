@@ -23,15 +23,27 @@ public class Role extends LongIdEntity {
         this.name = name;
     }
 
-    @Override
-    public Role updateId(final Long id) {
-        super.updateId(id);
-        return this;
+    public RoleUpdater roleUpdater() {
+        return new RoleUpdater();
     }
 
-    public Role updateName(final String name) {
-        this.name = name;
-        return this;
+    public class RoleUpdater implements Updater<Role> {
+
+        public RoleUpdater id(final Long id) {
+            setId(id);
+            return this;
+        }
+
+        public RoleUpdater name(final String name) {
+            Role.this.name = name;
+            return this;
+        }
+
+        @Override
+        public Role update() {
+            return Role.this;
+        }
+
     }
 
 }

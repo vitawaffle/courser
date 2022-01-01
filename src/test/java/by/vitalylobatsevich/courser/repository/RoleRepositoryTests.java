@@ -46,7 +46,12 @@ class RoleRepositoryTests {
 
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
-        assertThrows(Exception.class, () -> roleRepository.save(roleFactory.createValidEntity().updateName(null)));
+        assertThrows(Exception.class, () -> roleRepository.save(
+                roleFactory.createValidEntity()
+                        .roleUpdater()
+                        .name(null)
+                        .update()
+        ));
     }
 
     @Test

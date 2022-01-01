@@ -46,7 +46,12 @@ class UserRepositoryTests {
 
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
-        assertThrows(Exception.class, () -> userRepository.save(userFactory.createValidEntity().updateEmail(null)));
+        assertThrows(Exception.class, () -> userRepository.save(
+                userFactory.createValidEntity()
+                        .userUpdater()
+                        .email(null)
+                        .update()
+        ));
     }
 
     @Test

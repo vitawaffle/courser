@@ -40,30 +40,42 @@ public class EmailConfirmationToken extends LongIdEntity {
         this.canBeResend = canBeResend;
     }
 
-    @Override
-    public EmailConfirmationToken updateId(final Long id) {
-        super.updateId(id);
-        return this;
+    public EmailConfirmationTokenUpdater emailConfirmationTokenUpdater() {
+        return new EmailConfirmationTokenUpdater();
     }
 
-    public EmailConfirmationToken updateToken(final String token) {
-        this.token = token;
-        return this;
-    }
+    public class EmailConfirmationTokenUpdater implements Updater<EmailConfirmationToken> {
 
-    public EmailConfirmationToken updateUser(final User user) {
-        this.user = user;
-        return this;
-    }
+        public EmailConfirmationTokenUpdater id(final Long id) {
+            setId(id);
+            return this;
+        }
 
-    public EmailConfirmationToken updateExpirationDate(final Instant expirationDate) {
-        this.expirationDate = expirationDate;
-        return this;
-    }
+        public EmailConfirmationTokenUpdater token(final String token) {
+            EmailConfirmationToken.this.token = token;
+            return this;
+        }
 
-    public EmailConfirmationToken updateCanBeResend(final Instant canBeResend) {
-        this.canBeResend = canBeResend;
-        return this;
+        public EmailConfirmationTokenUpdater user(final User user) {
+            EmailConfirmationToken.this.user = user;
+            return this;
+        }
+
+        public EmailConfirmationTokenUpdater expirationDate(final Instant expirationDate) {
+            EmailConfirmationToken.this.expirationDate = expirationDate;
+            return this;
+        }
+
+        public EmailConfirmationTokenUpdater canBeResend(final Instant canBeResend) {
+            EmailConfirmationToken.this.canBeResend = canBeResend;
+            return this;
+        }
+
+        @Override
+        public EmailConfirmationToken update() {
+            return EmailConfirmationToken.this;
+        }
+
     }
 
 }

@@ -1,8 +1,9 @@
 package by.vitalylobatsevich.courser.database.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,10 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class LongIdEntity extends Entity {
+public abstract class LongIdEntity extends CourserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

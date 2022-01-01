@@ -1,7 +1,6 @@
 package by.vitalylobatsevich.courser.database.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -11,8 +10,10 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "email_confirmation_tokens")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString(exclude = "user")
 public class EmailConfirmationToken extends LongIdEntity {
 
     private String token;
@@ -24,6 +25,7 @@ public class EmailConfirmationToken extends LongIdEntity {
 
     private Instant canBeResend;
 
+    @Builder(builderMethodName = "emailConfirmationTokenBuilder")
     public EmailConfirmationToken(
             final Long id,
             final String token,
@@ -36,10 +38,6 @@ public class EmailConfirmationToken extends LongIdEntity {
         this.user = user;
         this.expirationDate = expirationDate;
         this.canBeResend = canBeResend;
-    }
-
-    public EmailConfirmationToken(final Long id) {
-        super(id);
     }
 
     @Override

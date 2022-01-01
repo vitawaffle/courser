@@ -52,12 +52,12 @@ class RoleRepositoryTests {
     @Test
     @Transactional
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> roleRepository.delete(new Role(1L)));
+        assertDoesNotThrow(() -> roleRepository.delete(Role.roleBuilder().id(1L).build()));
     }
 
     @Test
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> roleRepository.delete(new Role(0L)));
+        assertDoesNotThrow(() -> roleRepository.delete(Role.roleBuilder().id(0L).build()));
     }
 
     @Test

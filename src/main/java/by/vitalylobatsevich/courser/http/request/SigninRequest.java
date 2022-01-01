@@ -4,15 +4,15 @@ import by.vitalylobatsevich.courser.application.validation.Email;
 import by.vitalylobatsevich.courser.application.validation.Password;
 import by.vitalylobatsevich.courser.application.validation.UniqueEmail;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(builderMethodName = "signinRequestBuilder")
 public class SigninRequest extends Request {
 
     @NotBlank(message = "{validation.not-blank}")

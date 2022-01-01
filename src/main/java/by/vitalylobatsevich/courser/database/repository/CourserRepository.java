@@ -1,14 +1,15 @@
 package by.vitalylobatsevich.courser.database.repository;
 
-import by.vitalylobatsevich.courser.database.entity.Entity;
+import by.vitalylobatsevich.courser.database.entity.CourserEntity;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.Repository;
 
 @NoRepositoryBean
-public interface Repository<T extends Entity, ID> extends org.springframework.data.repository.Repository<T, ID> {
+public interface CourserRepository<T extends CourserEntity, ID> extends Repository<T, ID> {
 
     Option<T> findById(ID id);
 

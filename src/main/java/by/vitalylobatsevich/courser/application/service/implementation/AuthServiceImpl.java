@@ -20,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -39,13 +39,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String signin(final SigninRequest signinRequest, final Locale locale) {
-        applicationEventPublisher.publishEvent(new SigninEvent(locale, userRepository.save(new User(
-                null,
-                signinRequest.getEmail(),
-                passwordEncoder.encode(signinRequest.getPassword()),
-                Arrays.asList(new Role(1L)),
-                null
-        ))));
+        applicationEventPublisher.publishEvent(SigninEvent.signinEventBuilder()
+                .locale(locale)
+                .user(userRepository.save(User.userBuilder()
+                        .email(signinRequest.getEmail())
+                        .password(passwordEncoder.encode(signinRequest.getPassword()))
+                        .roles(List.of(Role.roleBuilder().id(1L).build()))
+                        .build()
+                ))
+        );
 
         return login(new LoginRequest(signinRequest));
     }

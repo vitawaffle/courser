@@ -57,12 +57,20 @@ class EmailConfirmationTokenRepositoryTests {
     @Test
     @Transactional
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> emailConfirmationTokenRepository.delete(new EmailConfirmationToken(1L)));
+        assertDoesNotThrow(() -> emailConfirmationTokenRepository.delete(
+                EmailConfirmationToken.emailConfirmationTokenBuilder()
+                        .id(1L)
+                        .build()
+        ));
     }
 
     @Test
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> emailConfirmationTokenRepository.delete(new EmailConfirmationToken(0L)));
+        assertDoesNotThrow(() -> emailConfirmationTokenRepository.delete(
+                EmailConfirmationToken.emailConfirmationTokenBuilder()
+                        .id(0L)
+                        .build()
+        ));
     }
 
     @Test
@@ -88,12 +96,12 @@ class EmailConfirmationTokenRepositoryTests {
 
     @Test
     void findByUser_UserWithExistingId_ShouldReturnNotEmpty() {
-        assertFalse(emailConfirmationTokenRepository.findByUser(new User(1L)).isEmpty());
+        assertFalse(emailConfirmationTokenRepository.findByUser(User.userBuilder().id(1L).build()).isEmpty());
     }
 
     @Test
     void findByUser_UserWithNotExistingId_ShouldReturnEmpty() {
-        assertTrue(emailConfirmationTokenRepository.findByUser(new User(0L)).isEmpty());
+        assertTrue(emailConfirmationTokenRepository.findByUser(User.userBuilder().id(0L).build()).isEmpty());
     }
 
 }

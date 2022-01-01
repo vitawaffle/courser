@@ -1,7 +1,6 @@
 package by.vitalylobatsevich.courser.database.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -12,8 +11,10 @@ import java.util.Collections;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString(exclude = "roles")
 public class User extends LongIdEntity {
 
     private String email;
@@ -30,6 +31,7 @@ public class User extends LongIdEntity {
 
     private Instant emailConfirmedAt;
 
+    @Builder(builderMethodName = "userBuilder")
     public User(
             final Long id,
             final String email,
@@ -42,10 +44,6 @@ public class User extends LongIdEntity {
         this.password = password;
         this.roles = roles;
         this.emailConfirmedAt = emailConfirmedAt;
-    }
-
-    public User(final Long id) {
-        super(id);
     }
 
     @Override

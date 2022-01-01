@@ -5,8 +5,10 @@ import by.vitalylobatsevich.courser.database.entity.User;
 
 import io.vavr.control.Option;
 
-@org.springframework.stereotype.Repository
-public interface EmailConfirmationTokenRepository extends Repository<EmailConfirmationToken, Long> {
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EmailConfirmationTokenRepository extends CourserRepository<EmailConfirmationToken, Long> {
 
     Option<EmailConfirmationToken> findByToken(String token);
 

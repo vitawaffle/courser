@@ -4,8 +4,10 @@ import by.vitalylobatsevich.courser.database.entity.User;
 
 import io.vavr.control.Option;
 
-@org.springframework.stereotype.Repository
-public interface UserRepository extends Repository<User, Long> {
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends CourserRepository<User, Long> {
 
     boolean existsByEmail(String email);
 

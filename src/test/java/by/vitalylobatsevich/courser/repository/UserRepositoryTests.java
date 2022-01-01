@@ -52,12 +52,12 @@ class UserRepositoryTests {
     @Test
     @Transactional
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> userRepository.delete(new User(1L)));
+        assertDoesNotThrow(() -> userRepository.delete(User.userBuilder().id(1L).build()));
     }
 
     @Test
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> userRepository.delete(new User(0L)));
+        assertDoesNotThrow(() -> userRepository.delete(User.userBuilder().id(0L).build()));
     }
 
     @Test

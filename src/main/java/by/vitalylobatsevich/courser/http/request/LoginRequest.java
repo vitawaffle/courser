@@ -1,14 +1,14 @@
 package by.vitalylobatsevich.courser.http.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(builderMethodName = "loginRequestBuilder")
 public class LoginRequest extends Request {
 
     @NotNull(message = "{validation.not-null}")

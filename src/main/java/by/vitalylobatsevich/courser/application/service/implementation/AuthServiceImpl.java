@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
     ) {
         val user = userRepository.findByEmail(email)
                 .getOrElseThrow(() -> new UsernameNotFoundException(email));
-        if (!user.getPassword().equals(changePasswordRequest.getOldPassword())) {
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
             return ResponseEntity.status(401).body(messageSource.getMessage(
                     "validation.old-password",
                     null,

@@ -7,6 +7,8 @@ import by.vitalylobatsevich.courser.http.request.SigninRequest;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +36,15 @@ public class AuthController {
     }
 
     @PostMapping("/change-password")
-    public void changePassword(@RequestBody @Valid final ChangePasswordRequest changePasswordRequest) {
-        // TODO
+    public ResponseEntity<String> changePassword(
+            @RequestBody @Valid final ChangePasswordRequest changePasswordRequest,
+            final HttpServletRequest request
+    ) {
+        return authService.changePassword(
+                changePasswordRequest,
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                request.getLocale()
+        );
     }
 
 }

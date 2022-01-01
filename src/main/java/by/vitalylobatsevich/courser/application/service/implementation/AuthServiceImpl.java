@@ -14,9 +14,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final MessageSource messageSource;
 
     @Override
     public String signin(final SigninRequest signinRequest, final Locale locale) {
@@ -63,7 +68,26 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void changePassword(final ChangePasswordRequest changePasswordRequest) {
+    public ResponseEntity<String> changePassword(
+            final ChangePasswordRequest changePasswordRequest,
+            final String email,
+            final Locale locale
+    ) {
+        val user = userRepository.findByEmail(email)
+                .getOrElseThrow(() -> new UsernameNotFoundException(email));
+        if (!user.getPassword().equals(changePasswordRequest.getOldPassword())) {
+            return ResponseEntity.status(401).body(messageSource.getMessage(
+                    "validation.old-password",
+                    null,
+                    locale
+            ));
+        }
+        userRepository.save(
+                user.userUpdater()
+                        .password(passwordEncoder.encode(changePasswordRequest.getNewPassword()))
+                        .update()
+        );
+        return ResponseEntity.ok("");
     }
 
 }

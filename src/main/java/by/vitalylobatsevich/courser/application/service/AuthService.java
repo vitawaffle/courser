@@ -4,6 +4,8 @@ import by.vitalylobatsevich.courser.http.request.ChangePasswordRequest;
 import by.vitalylobatsevich.courser.http.request.LoginRequest;
 import by.vitalylobatsevich.courser.http.request.SigninRequest;
 
+import org.springframework.http.ResponseEntity;
+
 import java.util.Locale;
 
 public interface AuthService extends Service {
@@ -12,6 +14,6 @@ public interface AuthService extends Service {
 
     String login(LoginRequest loginRequest);
 
-    void changePassword(ChangePasswordRequest changePasswordRequest);
+    ResponseEntity<String> changePassword(ChangePasswordRequest changePasswordRequest, String email, Locale locale);
 
 }

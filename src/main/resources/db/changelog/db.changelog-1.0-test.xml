@@ -44,20 +44,4 @@
         </insert>
     </changeSet>
 
-    <changeSet id="insert_test_uploaded_files" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)"
-               context="test">
-        <insert tableName="uploaded_files">
-            <column name="path" value="uploaded/test-path1" />
-            <column name="user_id" value="1" />
-        </insert>
-        <insert tableName="uploaded_files">
-            <column name="path" value="uploaded/test-path2" />
-            <column name="user_id" value="1" />
-        </insert>
-        <insert tableName="uploaded_files">
-            <column name="path" value="uploaded/test-path3" />
-            <column name="user_id" value="1" />
-        </insert>
-    </changeSet>
-
 </databaseChangeLog>

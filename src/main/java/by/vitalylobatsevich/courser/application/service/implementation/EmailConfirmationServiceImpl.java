@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.application.service.implementation;
 
 import by.vitalylobatsevich.courser.application.service.EmailConfirmationService;
+import by.vitalylobatsevich.courser.application.service.implementation.exception.SendingConfirmationEmailException;
 import by.vitalylobatsevich.courser.database.entity.EmailConfirmationToken;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.EmailConfirmationTokenRepository;
@@ -90,7 +91,10 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
             mailSender.send(mimeMessage);
         } catch (final MessagingException messagingException) {
-            log.error("Error of sending verification email message.", messagingException);
+            throw new SendingConfirmationEmailException(
+                    "Error of sending verification email message.",
+                    messagingException
+            );
         }
     }
 

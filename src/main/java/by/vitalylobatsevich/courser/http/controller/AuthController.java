@@ -35,6 +35,7 @@ public class AuthController {
 
     @PostMapping("/change-password")
     public void changePassword(@RequestBody @Valid final ChangePasswordRequest changePasswordRequest) {
+        // TODO
     }
 
 }

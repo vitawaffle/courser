@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.http.request;
 
 import by.vitalylobatsevich.courser.application.validation.Password;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

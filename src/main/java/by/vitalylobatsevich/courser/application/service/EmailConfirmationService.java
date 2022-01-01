@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.application.service;
 
 import by.vitalylobatsevich.courser.database.entity.User;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
 

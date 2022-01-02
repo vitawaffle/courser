@@ -7,6 +7,8 @@ import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.EmailConfirmationTokenRepository;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
 
+import io.vavr.control.Option;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -149,6 +151,13 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
         }
         sendConfirmationEmail(user, locale);
         return ResponseEntity.ok("");
+    }
+
+    @Override
+    public Option<Instant> whenCanBeResend(final String email) {
+        return emailConfirmationTokenRepository.findByUser(userRepository.findByEmail(email)
+                .getOrElseThrow(() -> new UsernameNotFoundException(email)))
+                .map(EmailConfirmationToken::getCanBeResend);
     }
 
 }

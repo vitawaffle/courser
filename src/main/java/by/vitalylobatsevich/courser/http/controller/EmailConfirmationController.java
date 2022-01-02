@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/email-confirmation")
@@ -33,6 +34,15 @@ public class EmailConfirmationController {
                 SecurityContextHolder.getContext().getAuthentication().getName(),
                 request.getLocale()
         );
+    }
+
+    @GetMapping("/can-be-resend")
+    public Instant getCanBeResend() {
+        return emailConfirmationService.whenCanBeResend(
+                SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getName()
+        ).getOrNull();
     }
 
 }

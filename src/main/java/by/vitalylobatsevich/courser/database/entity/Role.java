@@ -1,9 +1,6 @@
 package by.vitalylobatsevich.courser.database.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,6 +10,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Role extends LongIdEntity {
 
     private String name;

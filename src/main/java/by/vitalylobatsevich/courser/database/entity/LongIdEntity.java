@@ -21,9 +21,4 @@ public abstract class LongIdEntity extends CourserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public LongIdEntity updateId(final Long id) {
-        this.id = id;
-        return this;
-    }
-
 }

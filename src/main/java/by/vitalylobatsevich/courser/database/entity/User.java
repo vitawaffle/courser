@@ -14,7 +14,7 @@ import java.util.Collections;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "roles")
+@ToString
 public class User extends LongIdEntity {
 
     private String email;

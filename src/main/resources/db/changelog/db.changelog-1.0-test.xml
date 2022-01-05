@@ -56,4 +56,28 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_test_names" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="test">
+        <insert tableName="names">
+            <column name="first_name" value="Test First Name 1" />
+            <column name="last_name" value="Test Last Name 1" />
+            <column name="patronymic" value="Test Patronymic 1" />
+            <column name="language_id" value="1" />
+            <column name="user_id" value="1" />
+        </insert>
+        <insert tableName="names">
+            <column name="first_name" value="Test First Name 2" />
+            <column name="last_name" value="Test Last Name 2" />
+            <column name="patronymic" value="Test Patronymic 2" />
+            <column name="language_id" value="2" />
+            <column name="user_id" value="1" />
+        </insert>
+        <insert tableName="names">
+            <column name="first_name" value="Test First Name 3" />
+            <column name="last_name" value="Test Last Name 3" />
+            <column name="patronymic" value="Test Patronymic 3" />
+            <column name="language_id" value="3" />
+            <column name="user_id" value="1" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

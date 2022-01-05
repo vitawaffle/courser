@@ -107,4 +107,21 @@
         </insert>
     </changeSet>
 
+    <changeSet id="create_names_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="default">
+        <createTable tableName="names">
+            <column name="first_name" type="text" />
+            <column name="last_name" type="text" />
+            <column name="patronymic" type="text" />
+            <column name="language_id" type="bigint">
+                <constraints nullable="false" referencedTableName="languages" referencedColumnNames="id"
+                             foreignKeyName="names_language_id_fk" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" referencedTableName="users" referencedColumnNames="id"
+                             foreignKeyName="names_user_id_fl" />
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="names" columnNames="language_id, user_id" />
+    </changeSet>
+
 </databaseChangeLog>

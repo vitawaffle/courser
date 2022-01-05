@@ -39,7 +39,7 @@ public class Language extends LongIdEntity {
 
         @Override
         public Language update() {
-            return null;
+            return Language.this;
         }
 
     }

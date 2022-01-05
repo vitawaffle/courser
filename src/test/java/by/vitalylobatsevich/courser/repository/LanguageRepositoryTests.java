@@ -77,4 +77,14 @@ class LanguageRepositoryTests {
         assertThrows(EmptyResultDataAccessException.class, () -> languageRepository.deleteById(0L));
     }
 
+    @Test
+    void existsByCode_ExistingCode_ShouldReturnTrue() {
+        assertTrue(languageRepository.existsByCode("test1"));
+    }
+
+    @Test
+    void existsByCode_NotExistingCode_ShouldReturnFalse() {
+        assertFalse(languageRepository.existsByCode(""));
+    }
+
 }

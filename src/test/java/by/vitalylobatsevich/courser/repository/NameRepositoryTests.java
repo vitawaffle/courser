@@ -1,10 +1,10 @@
 package by.vitalylobatsevich.courser.repository;
 
-import by.vitalylobatsevich.courser.database.entity.Language;
 import by.vitalylobatsevich.courser.database.entity.Name;
 import by.vitalylobatsevich.courser.database.entity.NameId;
-import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.NameRepository;
+import by.vitalylobatsevich.courser.factory.NameFactory;
+import by.vitalylobatsevich.courser.factory.implementation.NameFactoryImpl;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +21,8 @@ class NameRepositoryTests {
 
     @Autowired
     NameRepository nameRepository;
+
+    NameFactory nameFactory = new NameFactoryImpl();
 
     @Test
     void findAll_ShouldReturnNotEmpty() {
@@ -40,26 +42,18 @@ class NameRepositoryTests {
     @Test
     @Transactional
     void save_ValidEntity_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> nameRepository.save(
-                Name.nameBuilder()
-                        .nameId(new NameId())
-                        .firstName("Test First Name")
-                        .lastName("Test Last Name")
-                        .patronymic("Test Patronymic")
-                        .language(Language.languageBuilder().id(1L).build())
-                        .user(User.userBuilder().id(2L).build())
-                        .build()
-        ));
+        assertDoesNotThrow(() -> nameRepository.save(nameFactory.createValidEntity()));
     }
 
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
         assertThrows(Exception.class, () -> nameRepository.save(
-                Name.nameBuilder()
-                        .firstName("Test First Name")
-                        .lastName("Test Last Name")
-                        .patronymic("Test Patronymic")
-                        .build()
+                nameFactory.createValidEntity()
+                        .nameUpdater()
+                        .nameId(null)
+                        .language(null)
+                        .user(null)
+                        .update()
         ));
     }
 
@@ -68,7 +62,7 @@ class NameRepositoryTests {
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
         assertDoesNotThrow(() -> nameRepository.delete(
                 Name.nameBuilder()
-                        .nameId(new NameId(1L, 1L))
+                        .id(new NameId(1L, 1L))
                         .build()
         ));
     }
@@ -77,7 +71,7 @@ class NameRepositoryTests {
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
         assertDoesNotThrow(() -> nameRepository.delete(
                 Name.nameBuilder()
-                        .nameId(new NameId(0L, 0L))
+                        .id(new NameId(0L, 0L))
                         .build()
         ));
     }

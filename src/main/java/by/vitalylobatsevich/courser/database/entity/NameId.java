@@ -1,17 +1,17 @@
 package by.vitalylobatsevich.courser.database.entity;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import javax.persistence.Embeddable;
 
 import java.io.Serializable;
 
 @Embeddable
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class NameId implements Serializable {
 
     private Long languageId;

@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Name extends CourserEntity {
 
     @EmbeddedId
-    private NameId nameId;
+    private NameId id;
 
     private String firstName;
 
@@ -37,6 +37,11 @@ public class Name extends CourserEntity {
 
     public class NameUpdater implements Updater<Name> {
 
+        public NameUpdater nameId(final NameId id) {
+            Name.this.id = id;
+            return this;
+        }
+
         public NameUpdater firstName(final String firstName) {
             Name.this.firstName = firstName;
             return this;
@@ -49,6 +54,16 @@ public class Name extends CourserEntity {
 
         public NameUpdater patronymic(final String patronymic) {
             Name.this.patronymic = patronymic;
+            return this;
+        }
+
+        public NameUpdater language(final Language language) {
+            Name.this.language = language;
+            return this;
+        }
+
+        public NameUpdater user(final User user) {
+            Name.this.user = user;
             return this;
         }
 

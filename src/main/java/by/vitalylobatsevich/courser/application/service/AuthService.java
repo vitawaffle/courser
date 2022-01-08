@@ -1,8 +1,8 @@
 package by.vitalylobatsevich.courser.application.service;
 
-import by.vitalylobatsevich.courser.http.request.ChangePasswordDTO;
-import by.vitalylobatsevich.courser.http.request.LoginCredentialsDTO;
-import by.vitalylobatsevich.courser.http.request.SigninCredentialsDTO;
+import by.vitalylobatsevich.courser.http.dto.ChangePasswordDTO;
+import by.vitalylobatsevich.courser.http.dto.LoginCredentialsDTO;
+import by.vitalylobatsevich.courser.http.dto.SigninCredentialsDTO;
 
 import org.springframework.http.ResponseEntity;
 

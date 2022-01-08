@@ -1,4 +1,4 @@
-package by.vitalylobatsevich.courser.http.request;
+package by.vitalylobatsevich.courser.http.dto;
 
 import lombok.*;
 

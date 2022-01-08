@@ -6,9 +6,9 @@ import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.database.entity.Role;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
-import by.vitalylobatsevich.courser.http.request.ChangePasswordDTO;
-import by.vitalylobatsevich.courser.http.request.LoginCredentialsDTO;
-import by.vitalylobatsevich.courser.http.request.SigninCredentialsDTO;
+import by.vitalylobatsevich.courser.http.dto.ChangePasswordDTO;
+import by.vitalylobatsevich.courser.http.dto.LoginCredentialsDTO;
+import by.vitalylobatsevich.courser.http.dto.SigninCredentialsDTO;
 
 import io.vavr.collection.HashMap;
 

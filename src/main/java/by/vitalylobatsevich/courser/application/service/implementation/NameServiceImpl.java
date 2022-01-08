@@ -1,10 +1,12 @@
 package by.vitalylobatsevich.courser.application.service.implementation;
 
 import by.vitalylobatsevich.courser.application.service.NameService;
+import by.vitalylobatsevich.courser.database.entity.Language;
 import by.vitalylobatsevich.courser.database.entity.Name;
 import by.vitalylobatsevich.courser.database.entity.NameId;
 import by.vitalylobatsevich.courser.database.repository.NameRepository;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
+import by.vitalylobatsevich.courser.http.dto.NameDTO;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
@@ -47,9 +49,16 @@ public class NameServiceImpl implements NameService {
     }
 
     @Override
-    public Name save(final Name name, final String username) {
-        return save(name.updater().user(userRepository.findByEmail(username).getOrElseThrow(
-                () -> new UsernameNotFoundException(username))).update());
+    public Name save(final NameDTO nameDTO, final String username) {
+        return save(
+                Name.builder()
+                        .firstName(nameDTO.getFirstName())
+                        .lastName(nameDTO.getLastName())
+                        .patronymic(nameDTO.getPatronymic())
+                        .language(Language.builder().id(nameDTO.getLanguageId()).build())
+                        .user(userRepository.findByEmail(username)
+                                .getOrElseThrow(() -> new UsernameNotFoundException(username)))
+                        .build());
     }
 
 }

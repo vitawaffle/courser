@@ -2,6 +2,7 @@ package by.vitalylobatsevich.courser.application.validation.validator;
 
 import by.vitalylobatsevich.courser.application.validation.UniqueEmail;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.ConstraintValidator;

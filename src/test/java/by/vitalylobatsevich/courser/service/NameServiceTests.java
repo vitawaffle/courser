@@ -7,7 +7,9 @@ import by.vitalylobatsevich.courser.database.entity.NameId;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.NameRepository;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
+import by.vitalylobatsevich.courser.factory.NameDTOFactory;
 import by.vitalylobatsevich.courser.factory.NameFactory;
+import by.vitalylobatsevich.courser.factory.implementation.NameDTOFactoryImpl;
 import by.vitalylobatsevich.courser.factory.implementation.NameFactoryImpl;
 
 import io.vavr.collection.List;
@@ -38,6 +40,8 @@ class NameServiceTests {
     UserRepository userRepository;
 
     NameFactory nameFactory = new NameFactoryImpl();
+
+    NameDTOFactory nameDTOFactory = new NameDTOFactoryImpl();
 
     @BeforeEach
     void setUp() {
@@ -103,13 +107,13 @@ class NameServiceTests {
 
     @Test
     void save_ExistingUsername_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> nameService.save(nameFactory.createValidEntity(), "test.email@test.org"));
+        assertDoesNotThrow(() -> nameService.save(nameDTOFactory.createValidEntity(), "test.email@test.org"));
     }
 
     @Test
     void save_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
         assertThrows(UsernameNotFoundException.class,
-                     () -> nameService.save(nameFactory.createValidEntity(), ""));
+                     () -> nameService.save(nameDTOFactory.createValidEntity(), ""));
     }
 
 }

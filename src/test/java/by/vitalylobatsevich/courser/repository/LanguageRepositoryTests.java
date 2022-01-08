@@ -83,4 +83,14 @@ class LanguageRepositoryTests {
         assertFalse(languageRepository.existsByCode(""));
     }
 
+    @Test
+    void existsById_ExistingId_ShouldReturnTrue() {
+        assertTrue(languageRepository.existsById(1L));
+    }
+
+    @Test
+    void existsById_NotExistingId_ShouldReturnFalse() {
+        assertFalse(languageRepository.existsById(0L));
+    }
+
 }

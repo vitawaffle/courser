@@ -9,4 +9,6 @@ public interface LanguageRepository extends AppRepository<Language, Long> {
 
     boolean existsByCode(String code);
 
+    boolean existsById(Long id);
+
 }

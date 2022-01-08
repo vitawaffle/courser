@@ -15,7 +15,7 @@ import javax.persistence.MappedSuperclass;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class LongIdEntity extends CourserEntity {
+public abstract class LongIdEntity extends AppEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

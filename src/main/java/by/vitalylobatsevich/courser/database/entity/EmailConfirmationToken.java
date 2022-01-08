@@ -25,14 +25,12 @@ public class EmailConfirmationToken extends LongIdEntity {
 
     private Instant canBeResend;
 
-    @Builder(builderMethodName = "emailConfirmationTokenBuilder")
-    public EmailConfirmationToken(
-            final Long id,
-            final String token,
-            final User user,
-            final Instant expirationDate,
-            final Instant canBeResend
-    ) {
+    @Builder
+    public EmailConfirmationToken(final Long id,
+                                  final String token,
+                                  final User user,
+                                  final Instant expirationDate,
+                                  final Instant canBeResend) {
         super(id);
         this.token = token;
         this.user = user;
@@ -40,7 +38,7 @@ public class EmailConfirmationToken extends LongIdEntity {
         this.canBeResend = canBeResend;
     }
 
-    public EmailConfirmationTokenUpdater emailConfirmationTokenUpdater() {
+    public EmailConfirmationTokenUpdater updater() {
         return new EmailConfirmationTokenUpdater();
     }
 

@@ -6,9 +6,11 @@ import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.database.entity.Role;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
-import by.vitalylobatsevich.courser.http.request.ChangePasswordRequest;
-import by.vitalylobatsevich.courser.http.request.LoginRequest;
-import by.vitalylobatsevich.courser.http.request.SigninRequest;
+import by.vitalylobatsevich.courser.http.request.ChangePasswordDTO;
+import by.vitalylobatsevich.courser.http.request.LoginCredentialsDTO;
+import by.vitalylobatsevich.courser.http.request.SigninCredentialsDTO;
+
+import io.vavr.collection.HashMap;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -43,51 +45,42 @@ public class AuthServiceImpl implements AuthService {
     private final MessageSource messageSource;
 
     @Override
-    public String signin(final SigninRequest signinRequest, final Locale locale) {
-        applicationEventPublisher.publishEvent(SigninEvent.signinEventBuilder()
-                .locale(locale)
-                .user(userRepository.save(User.userBuilder()
-                        .email(signinRequest.getEmail())
-                        .password(passwordEncoder.encode(signinRequest.getPassword()))
-                        .roles(List.of(Role.roleBuilder().id(1L).build()))
-                        .build()
-                ))
-        );
+    public String signin(final SigninCredentialsDTO signinCredentialsDTO, final Locale locale) {
+        applicationEventPublisher.publishEvent(
+                SigninEvent.signinEventBuilder().locale(locale).user(
+                        userRepository.save(User.builder()
+                                .email(signinCredentialsDTO.getEmail())
+                                .password(passwordEncoder.encode(signinCredentialsDTO.getPassword()))
+                                .roles(List.of(Role.builder().id(1L).build())).build())));
 
-        return login(new LoginRequest(signinRequest));
+        return login(new LoginCredentialsDTO(signinCredentialsDTO));
     }
 
     @Override
-    public String login(final LoginRequest loginRequest) {
+    public String login(final LoginCredentialsDTO loginCredentialsDTO) {
         val authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-        ));
+                loginCredentialsDTO.getEmail(), loginCredentialsDTO.getPassword()));
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return jwtUtils.generate(authentication);
     }
 
     @Override
-    public ResponseEntity<String> changePassword(
-            final ChangePasswordRequest changePasswordRequest,
-            final String email,
-            final Locale locale
-    ) {
-        val user = userRepository.findByEmail(email)
-                .getOrElseThrow(() -> new UsernameNotFoundException(email));
-        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body(messageSource.getMessage(
-                    "validation.old-password",
-                    null,
-                    locale
-            ));
+    public ResponseEntity<Object> changePassword(final ChangePasswordDTO changePasswordDTO,
+                                                 final String email,
+                                                 final Locale locale) {
+        val user = userRepository.findByEmail(email).getOrElseThrow(() -> new UsernameNotFoundException(email));
+
+        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).body(HashMap.of("oldPassword",
+                    messageSource.getMessage("validation.old-password", null, locale)));
         }
-        userRepository.save(
-                user.userUpdater()
-                        .password(passwordEncoder.encode(changePasswordRequest.getNewPassword()))
-                        .update()
-        );
-        return ResponseEntity.ok("");
+
+        userRepository.save(user.updater().password(
+                passwordEncoder.encode(changePasswordDTO.getNewPassword())).update());
+
+        return ResponseEntity.ok(null);
     }
 
 }

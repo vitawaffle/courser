@@ -1,5 +1,7 @@
 package by.vitalylobatsevich.courser.application.security;
 
+import io.vavr.control.Option;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -26,28 +28,21 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(
-            final HttpServletRequest request,
-            final HttpServletResponse response,
-            final FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(final HttpServletRequest request,
+                                    final HttpServletResponse response,
+                                    final FilterChain filterChain) throws ServletException, IOException {
         try {
-            val authorizationHeader = request.getHeader("Authorization");
-            String token = null;
-            if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-                token = authorizationHeader.substring(7);
-            }
-
-            if (token != null && jwtUtils.validate(token)) {
-                val userDetails= userDetailsService.loadUserByUsername(
-                        jwtUtils.getUsernameFromToken(token)
-                );
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                ));
-            }
+            Option.of(request.getHeader("Authorization")).peek(authorizationHeader -> {
+                if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+                    val token = authorizationHeader.substring(7);
+                    if (jwtUtils.validate(token)) {
+                        val userDetails
+                                = userDetailsService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+                        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities()));
+                    }
+                }
+            });
         } catch (final Exception exception) {
             log.error("Cannot authenticate user: {}", exception.getMessage());
         }

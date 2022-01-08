@@ -1,9 +1,9 @@
 package by.vitalylobatsevich.courser.http.controller;
 
 import by.vitalylobatsevich.courser.application.service.AuthService;
-import by.vitalylobatsevich.courser.http.request.ChangePasswordRequest;
-import by.vitalylobatsevich.courser.http.request.LoginRequest;
-import by.vitalylobatsevich.courser.http.request.SigninRequest;
+import by.vitalylobatsevich.courser.http.request.ChangePasswordDTO;
+import by.vitalylobatsevich.courser.http.request.LoginCredentialsDTO;
+import by.vitalylobatsevich.courser.http.request.SigninCredentialsDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,28 +23,22 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public String signin(
-            @RequestBody @Valid final SigninRequest signinRequest,
-            final HttpServletRequest request
-    ) {
-        return authService.signin(signinRequest, request.getLocale());
+    public String signin(@RequestBody @Valid final SigninCredentialsDTO signinCredentialsDTO,
+                         final HttpServletRequest request) {
+        return authService.signin(signinCredentialsDTO, request.getLocale());
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody @Valid final LoginRequest loginRequest) {
-        return authService.login(loginRequest);
+    public String login(@RequestBody @Valid final LoginCredentialsDTO loginCredentialsDTO) {
+        return authService.login(loginCredentialsDTO);
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(
-            @RequestBody @Valid final ChangePasswordRequest changePasswordRequest,
-            final HttpServletRequest request
-    ) {
-        return authService.changePassword(
-                changePasswordRequest,
-                SecurityContextHolder.getContext().getAuthentication().getName(),
-                request.getLocale()
-        );
+    public ResponseEntity<Object> changePassword(@RequestBody @Valid final ChangePasswordDTO changePasswordDTO,
+                                                 final HttpServletRequest request) {
+        return authService.changePassword(changePasswordDTO,
+                                          SecurityContextHolder.getContext().getAuthentication().getName(),
+                                          request.getLocale());
     }
 
 }

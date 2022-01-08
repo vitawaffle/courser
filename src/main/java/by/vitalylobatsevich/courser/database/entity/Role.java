@@ -15,13 +15,13 @@ public class Role extends LongIdEntity {
 
     private String name;
 
-    @Builder(builderMethodName = "roleBuilder")
+    @Builder
     public Role(final Long id, final String name) {
         super(id);
         this.name = name;
     }
 
-    public RoleUpdater roleUpdater() {
+    public RoleUpdater updater() {
         return new RoleUpdater();
     }
 

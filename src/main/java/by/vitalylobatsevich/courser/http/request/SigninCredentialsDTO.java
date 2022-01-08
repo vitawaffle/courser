@@ -12,8 +12,8 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "signinRequestBuilder")
-public class SigninRequest extends Request {
+@Builder
+public class SigninCredentialsDTO extends DTO {
 
     @NotBlank(message = "{validation.not-blank}")
     @Email(message = "{validation.email}")

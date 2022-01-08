@@ -8,8 +8,8 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "loginRequestBuilder")
-public class LoginRequest extends Request {
+@Builder
+public class LoginCredentialsDTO extends DTO {
 
     @NotNull(message = "{validation.not-null}")
     private String email;
@@ -17,7 +17,7 @@ public class LoginRequest extends Request {
     @NotNull(message = "{validation.not-null}")
     private String password;
 
-    public LoginRequest(final SigninRequest signinRequest) {
+    public LoginCredentialsDTO(final SigninCredentialsDTO signinRequest) {
         email = signinRequest.getEmail();
         password = signinRequest.getPassword();
     }

@@ -10,13 +10,13 @@ public class NameFactoryImpl implements NameFactory {
 
     @Override
     public Name createValidEntity() {
-        return Name.nameBuilder()
+        return Name.builder()
                 .id(new NameId())
                 .firstName("Test First Name")
                 .lastName("Test Last Name")
                 .patronymic("Test Patronymic")
-                .language(Language.languageBuilder().id(1L).build())
-                .user(User.userBuilder().id(2L).build())
+                .language(Language.builder().id(1L).build())
+                .user(User.builder().id(2L).build())
                 .build();
     }
 

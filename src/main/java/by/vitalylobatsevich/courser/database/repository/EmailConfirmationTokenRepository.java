@@ -8,7 +8,7 @@ import io.vavr.control.Option;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmailConfirmationTokenRepository extends CourserRepository<EmailConfirmationToken, Long> {
+public interface EmailConfirmationTokenRepository extends AppRepository<EmailConfirmationToken, Long> {
 
     Option<EmailConfirmationToken> findByToken(String token);
 

@@ -1,5 +1,6 @@
 package by.vitalylobatsevich.courser.database.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class NameId implements Serializable {
 
     private Long languageId;

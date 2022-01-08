@@ -3,9 +3,12 @@ package by.vitalylobatsevich.courser.application.service.implementation;
 import by.vitalylobatsevich.courser.application.service.LanguageService;
 import by.vitalylobatsevich.courser.database.entity.Language;
 import by.vitalylobatsevich.courser.database.repository.LanguageRepository;
+
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 

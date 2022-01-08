@@ -48,32 +48,19 @@ class NameRepositoryTests {
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
         assertThrows(Exception.class, () -> nameRepository.save(
-                nameFactory.createValidEntity()
-                        .nameUpdater()
-                        .nameId(null)
-                        .language(null)
-                        .user(null)
-                        .update()
+                nameFactory.createValidEntity().updater().nameId(null).language(null).user(null).update()
         ));
     }
 
     @Test
     @Transactional
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> nameRepository.delete(
-                Name.nameBuilder()
-                        .id(new NameId(1L, 1L))
-                        .build()
-        ));
+        assertDoesNotThrow(() -> nameRepository.delete(Name.builder().id(new NameId(1L, 1L)).build()));
     }
 
     @Test
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> nameRepository.delete(
-                Name.nameBuilder()
-                        .id(new NameId(0L, 0L))
-                        .build()
-        ));
+        assertDoesNotThrow(() -> nameRepository.delete(Name.builder().id(new NameId(0L, 0L)).build()));
     }
 
     @Test
@@ -84,10 +71,8 @@ class NameRepositoryTests {
 
     @Test
     void deleteById_NotExistingId_ShouldThrowsEmptyResultDataAccessException() {
-        assertThrows(
-                EmptyResultDataAccessException.class,
-                () -> nameRepository.deleteById(new NameId(0L, 0L))
-        );
+        assertThrows(EmptyResultDataAccessException.class,
+                     () -> nameRepository.deleteById(new NameId(0L, 0L)));
     }
 
 }

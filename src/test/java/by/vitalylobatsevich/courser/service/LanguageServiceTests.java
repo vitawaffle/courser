@@ -38,16 +38,16 @@ class LanguageServiceTests {
 
         Mockito.lenient()
                 .when(languageRepository.findAll())
-                .thenReturn(List.of(Language.languageBuilder().id(1L).build()));
+                .thenReturn(List.of(Language.builder().id(1L).build()));
         Mockito.lenient()
                 .when(languageRepository.findById(1L))
-                .thenReturn(Option.of(Language.languageBuilder().id(1L).build()));
+                .thenReturn(Option.of(Language.builder().id(1L).build()));
         Mockito.lenient()
                 .when(languageRepository.findById(0L))
                 .thenReturn(Option.none());
         Mockito.lenient()
                 .when(languageRepository.save(languageFactory.createValidEntity()))
-                .thenReturn(Language.languageBuilder().id(1L).build());
+                .thenReturn(Language.builder().id(1L).build());
         Mockito.lenient()
                 .doNothing()
                 .when(languageRepository)

@@ -1,8 +1,8 @@
 package by.vitalylobatsevich.courser.application.service;
 
-import by.vitalylobatsevich.courser.http.request.ChangePasswordRequest;
-import by.vitalylobatsevich.courser.http.request.LoginRequest;
-import by.vitalylobatsevich.courser.http.request.SigninRequest;
+import by.vitalylobatsevich.courser.http.request.ChangePasswordDTO;
+import by.vitalylobatsevich.courser.http.request.LoginCredentialsDTO;
+import by.vitalylobatsevich.courser.http.request.SigninCredentialsDTO;
 
 import org.springframework.http.ResponseEntity;
 
@@ -10,10 +10,10 @@ import java.util.Locale;
 
 public interface AuthService extends Service {
 
-    String signin(SigninRequest signinRequest, Locale locale);
+    String signin(SigninCredentialsDTO signinCredentialsDTO, Locale locale);
 
-    String login(LoginRequest loginRequest);
+    String login(LoginCredentialsDTO loginCredentialsDTO);
 
-    ResponseEntity<String> changePassword(ChangePasswordRequest changePasswordRequest, String email, Locale locale);
+    ResponseEntity<Object> changePassword(ChangePasswordDTO changePasswordDTO, String email, Locale locale);
 
 }

@@ -11,8 +11,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = { "language", "user" })
-@Builder(builderMethodName = "nameBuilder")
-public class Name extends CourserEntity {
+@Builder
+public class Name extends AppEntity {
 
     @EmbeddedId
     private NameId id;
@@ -31,7 +31,7 @@ public class Name extends CourserEntity {
     @MapsId("userId")
     private User user;
 
-    public NameUpdater nameUpdater() {
+    public NameUpdater updater() {
         return new NameUpdater();
     }
 

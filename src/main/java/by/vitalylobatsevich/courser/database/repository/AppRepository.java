@@ -1,6 +1,6 @@
 package by.vitalylobatsevich.courser.database.repository;
 
-import by.vitalylobatsevich.courser.database.entity.CourserEntity;
+import by.vitalylobatsevich.courser.database.entity.AppEntity;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
 @NoRepositoryBean
-public interface CourserRepository<T extends CourserEntity, ID> extends Repository<T, ID> {
+public interface AppRepository<T extends AppEntity, ID> extends Repository<T, ID> {
 
     Option<T> findById(ID id);
 

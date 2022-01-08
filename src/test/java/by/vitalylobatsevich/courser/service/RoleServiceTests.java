@@ -38,16 +38,16 @@ class RoleServiceTests {
 
         Mockito.lenient()
                 .when(roleRepository.findAll())
-                .thenReturn(List.of(Role.roleBuilder().id(1L).build()));
+                .thenReturn(List.of(Role.builder().id(1L).build()));
         Mockito.lenient()
                 .when(roleRepository.findById(1L))
-                .thenReturn(Option.of(Role.roleBuilder().id(1L).build()));
+                .thenReturn(Option.of(Role.builder().id(1L).build()));
         Mockito.lenient()
                 .when(roleRepository.findById(0L))
                 .thenReturn(Option.none());
         Mockito.lenient()
                 .when(roleRepository.save(roleFactory.createValidEntity()))
-                .thenReturn(Role.roleBuilder().id(1L).build());
+                .thenReturn(Role.builder().id(1L).build());
         Mockito.lenient()
                 .doNothing()
                 .when(roleRepository)

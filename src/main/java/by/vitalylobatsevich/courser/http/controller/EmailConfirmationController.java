@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.time.Instant;
 
 @RestController
@@ -21,28 +22,21 @@ public class EmailConfirmationController {
     private final EmailConfirmationService emailConfirmationService;
 
     @GetMapping("/confirm")
-    public ModelAndView confirmEmail(
-            @RequestParam("token") final String token,
-            final HttpServletRequest request
-    ) {
+    public ModelAndView confirmEmail(@RequestParam("token") final String token,
+                                     final HttpServletRequest request) {
         return emailConfirmationService.confirmEmail(token, request.getLocale());
     }
 
     @PostMapping("/resend")
-    public ResponseEntity<String> resendConfirmationEmail(final HttpServletRequest request) {
+    public ResponseEntity<Object> resendConfirmationEmail(final HttpServletRequest request) {
         return emailConfirmationService.resendConfirmationEmail(
-                SecurityContextHolder.getContext().getAuthentication().getName(),
-                request.getLocale()
-        );
+                SecurityContextHolder.getContext().getAuthentication().getName(), request.getLocale());
     }
 
     @GetMapping("/can-be-resend")
     public Instant getCanBeResend() {
         return emailConfirmationService.whenCanBeResend(
-                SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getName()
-        ).getOrNull();
+                SecurityContextHolder.getContext().getAuthentication().getName()).getOrNull();
     }
 
 }

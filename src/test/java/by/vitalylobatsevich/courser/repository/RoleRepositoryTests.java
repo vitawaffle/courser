@@ -46,23 +46,19 @@ class RoleRepositoryTests {
 
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
-        assertThrows(Exception.class, () -> roleRepository.save(
-                roleFactory.createValidEntity()
-                        .roleUpdater()
-                        .name(null)
-                        .update()
-        ));
+        assertThrows(Exception.class,
+                     () -> roleRepository.save(roleFactory.createValidEntity().updater().name(null).update()));
     }
 
     @Test
     @Transactional
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> roleRepository.delete(Role.roleBuilder().id(1L).build()));
+        assertDoesNotThrow(() -> roleRepository.delete(Role.builder().id(1L).build()));
     }
 
     @Test
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> roleRepository.delete(Role.roleBuilder().id(0L).build()));
+        assertDoesNotThrow(() -> roleRepository.delete(Role.builder().id(0L).build()));
     }
 
     @Test

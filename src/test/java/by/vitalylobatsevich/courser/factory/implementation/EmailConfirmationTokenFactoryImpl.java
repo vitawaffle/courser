@@ -10,9 +10,9 @@ public class EmailConfirmationTokenFactoryImpl implements EmailConfirmationToken
 
     @Override
     public EmailConfirmationToken createValidEntity() {
-        return EmailConfirmationToken.emailConfirmationTokenBuilder()
+        return EmailConfirmationToken.builder()
                 .token("cc78ee24-5082-49b4-bb3f-9ccdeba312ea")
-                .user(User.userBuilder().id(2L).build())
+                .user(User.builder().id(2L).build())
                 .expirationDate(Instant.now().plusMillis(86400000))
                 .canBeResend(Instant.now().plusMillis(60000))
                 .build();

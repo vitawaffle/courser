@@ -48,22 +48,18 @@ class LanguageRepositoryTests {
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
         assertThrows(Exception.class, () -> languageRepository.save(
-                languageFactory.createValidEntity()
-                        .languageUpdater()
-                        .code(null)
-                        .update()
-        ));
+                languageFactory.createValidEntity().updater().code(null).update()));
     }
 
     @Test
     @Transactional
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> languageRepository.delete(Language.languageBuilder().id(1L).build()));
+        assertDoesNotThrow(() -> languageRepository.delete(Language.builder().id(1L).build()));
     }
 
     @Test
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> languageRepository.delete(Language.languageBuilder().id(0L).build()));
+        assertDoesNotThrow(() -> languageRepository.delete(Language.builder().id(0L).build()));
     }
 
     @Test

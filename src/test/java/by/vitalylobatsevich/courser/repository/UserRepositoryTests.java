@@ -46,23 +46,19 @@ class UserRepositoryTests {
 
     @Test
     void save_NotValidEntity_ShouldThrowsException() {
-        assertThrows(Exception.class, () -> userRepository.save(
-                userFactory.createValidEntity()
-                        .userUpdater()
-                        .email(null)
-                        .update()
-        ));
+        assertThrows(Exception.class,
+                     () -> userRepository.save(userFactory.createValidEntity().updater().email(null).update()));
     }
 
     @Test
     @Transactional
     void delete_EntityWithExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> userRepository.delete(User.userBuilder().id(1L).build()));
+        assertDoesNotThrow(() -> userRepository.delete(User.builder().id(1L).build()));
     }
 
     @Test
     void delete_EntityWithNotExistingId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> userRepository.delete(User.userBuilder().id(0L).build()));
+        assertDoesNotThrow(() -> userRepository.delete(User.builder().id(0L).build()));
     }
 
     @Test

@@ -57,8 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeRequests(authorizeRequestsCustomizer -> authorizeRequestsCustomizer
+        httpSecurity.authorizeRequests(authorizeRequestsCustomizer -> authorizeRequestsCustomizer
                         .antMatchers(
                                 "/css/**",
                                 "/js/**",
@@ -69,19 +68,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                                 "/api/auth/signin",
                                 "/api/email-confirmation/confirm"
                         ).permitAll()
-                        .antMatchers(
-                                HttpMethod.GET,
+                        .antMatchers(HttpMethod.GET,
                                 "/api/configuration/password-rules"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exceptionHandlingCustomizer -> exceptionHandlingCustomizer
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                )
-                .sessionManagement(sessionManagementCustomizer -> sessionManagementCustomizer
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .exceptionHandling(exceptionHandlingCustomizer
+                        -> exceptionHandlingCustomizer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .sessionManagement(sessionManagementCustomizer
+                        -> sessionManagementCustomizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors();
 
         httpSecurity.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);

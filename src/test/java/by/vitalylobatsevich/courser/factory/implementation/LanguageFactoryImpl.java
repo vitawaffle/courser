@@ -7,7 +7,7 @@ public class LanguageFactoryImpl implements LanguageFactory {
 
     @Override
     public Language createValidEntity() {
-        return Language.languageBuilder()
+        return Language.builder()
                 .code("test")
                 .build();
     }

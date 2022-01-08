@@ -1,4 +1,4 @@
 package by.vitalylobatsevich.courser.http.request;
 
-public abstract class Request {
+public abstract class DTO {
 }

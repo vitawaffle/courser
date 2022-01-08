@@ -7,7 +7,7 @@ import io.vavr.control.Option;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends CourserRepository<User, Long> {
+public interface UserRepository extends AppRepository<User, Long> {
 
     boolean existsByEmail(String email);
 

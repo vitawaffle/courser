@@ -7,7 +7,7 @@ public class RoleFactoryImpl implements RoleFactory {
 
     @Override
     public Role createValidEntity() {
-        return Role.roleBuilder()
+        return Role.builder()
                 .name("TEST_ROLE")
                 .build();
     }

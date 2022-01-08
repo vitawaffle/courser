@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "changePasswordRequestBuilder")
-public class ChangePasswordRequest extends Request {
+@Builder
+public class ChangePasswordDTO extends DTO {
 
     @NotNull(message = "{validation.not-null}")
     private String oldPassword;

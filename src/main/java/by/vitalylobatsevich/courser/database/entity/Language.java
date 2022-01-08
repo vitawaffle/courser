@@ -15,13 +15,13 @@ public class Language extends LongIdEntity {
 
     private String code;
 
-    @Builder(builderMethodName = "languageBuilder")
+    @Builder
     public Language(final Long id, final String code) {
         super(id);
         this.code = code;
     }
 
-    public LanguageUpdater languageUpdater() {
+    public LanguageUpdater updater() {
         return new LanguageUpdater();
     }
 

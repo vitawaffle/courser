@@ -38,16 +38,16 @@ class UserServiceTests {
 
         Mockito.lenient()
                 .when(userRepository.findAll())
-                .thenReturn(List.of(User.userBuilder().id(1L).build()));
+                .thenReturn(List.of(User.builder().id(1L).build()));
         Mockito.lenient()
                 .when(userRepository.findById(1L))
-                .thenReturn(Option.of(User.userBuilder().id(1L).build()));
+                .thenReturn(Option.of(User.builder().id(1L).build()));
         Mockito.lenient()
                 .when(userRepository.findById(0L))
                 .thenReturn(Option.none());
         Mockito.lenient()
                 .when(userRepository.save(userFactory.createValidEntity()))
-                .thenReturn(User.userBuilder().id(1L).build());
+                .thenReturn(User.builder().id(1L).build());
         Mockito.lenient()
                 .doNothing()
                 .when(userRepository)
@@ -64,7 +64,7 @@ class UserServiceTests {
                 .thenReturn(false);
         Mockito.lenient()
                 .when(userRepository.findByEmail("test.email1@test.org"))
-                .thenReturn(Option.of(User.userBuilder().id(1L).build()));
+                .thenReturn(Option.of(User.builder().id(1L).build()));
         Mockito.lenient()
                 .when(userRepository.findByEmail(""))
                 .thenReturn(Option.none());

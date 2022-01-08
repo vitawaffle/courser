@@ -4,7 +4,9 @@ import by.vitalylobatsevich.courser.application.service.NameService;
 import by.vitalylobatsevich.courser.application.service.implementation.NameServiceImpl;
 import by.vitalylobatsevich.courser.database.entity.Name;
 import by.vitalylobatsevich.courser.database.entity.NameId;
+import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.NameRepository;
+import by.vitalylobatsevich.courser.database.repository.UserRepository;
 import by.vitalylobatsevich.courser.factory.NameFactory;
 import by.vitalylobatsevich.courser.factory.implementation.NameFactoryImpl;
 
@@ -20,6 +22,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,24 +34,27 @@ class NameServiceTests {
     @Mock
     NameRepository nameRepository;
 
+    @Mock
+    UserRepository userRepository;
+
     NameFactory nameFactory = new NameFactoryImpl();
 
     @BeforeEach
     void setUp() {
-        nameService = new NameServiceImpl(nameRepository);
+        nameService = new NameServiceImpl(nameRepository, userRepository);
 
         Mockito.lenient()
                 .when(nameRepository.findAll())
-                .thenReturn(List.of(Name.nameBuilder().id(new NameId(1L, 1L)).build()));
+                .thenReturn(List.of(Name.builder().id(new NameId(1L, 1L)).build()));
         Mockito.lenient()
                 .when(nameRepository.findById(new NameId(1L, 1L)))
-                .thenReturn(Option.of(Name.nameBuilder().id(new NameId(1L, 1L)).build()));
+                .thenReturn(Option.of(Name.builder().id(new NameId(1L, 1L)).build()));
         Mockito.lenient()
                 .when(nameRepository.findById(new NameId(0L, 0L)))
                 .thenReturn(Option.none());
         Mockito.lenient()
                 .when(nameRepository.save(nameFactory.createValidEntity()))
-                .thenReturn(Name.nameBuilder().id(new NameId(1L, 1L)).build());
+                .thenReturn(Name.builder().id(new NameId(1L, 1L)).build());
         Mockito.lenient()
                 .doNothing()
                 .when(nameRepository)
@@ -57,6 +63,12 @@ class NameServiceTests {
                 .doThrow(new EmptyResultDataAccessException(1))
                 .when(nameRepository)
                 .deleteById(new NameId(0L, 0L));
+        Mockito.lenient()
+                .when(userRepository.findByEmail("test.email@test.org"))
+                .thenReturn(Option.of(User.builder().id(1L).build()));
+        Mockito.lenient()
+                .when(userRepository.findByEmail(""))
+                .thenReturn(Option.none());
     }
 
     @Test
@@ -87,6 +99,17 @@ class NameServiceTests {
     @Test
     void deleteById_NotExistingId_ShouldDoesNotThrow() {
         assertDoesNotThrow(() -> nameService.deleteById(new NameId(0L, 0L)));
+    }
+
+    @Test
+    void save_ExistingUsername_ShouldDoesNotThrow() {
+        assertDoesNotThrow(() -> nameService.save(nameFactory.createValidEntity(), "test.email@test.org"));
+    }
+
+    @Test
+    void save_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
+        assertThrows(UsernameNotFoundException.class,
+                     () -> nameService.save(nameFactory.createValidEntity(), ""));
     }
 
 }

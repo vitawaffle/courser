@@ -22,23 +22,19 @@ public class User extends LongIdEntity {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinTable(name = "users_roles",
+               joinColumns = @JoinColumn(name = "user_id"),
+               inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles = Collections.emptySet();
 
     private Instant emailConfirmedAt;
 
-    @Builder(builderMethodName = "userBuilder")
-    public User(
-            final Long id,
-            final String email,
-            final String password,
-            final Collection<Role> roles,
-            final Instant emailConfirmedAt
-    ) {
+    @Builder
+    public User(final Long id,
+                final String email,
+                final String password,
+                final Collection<Role> roles,
+                final Instant emailConfirmedAt) {
         super(id);
         this.email = email;
         this.password = password;
@@ -46,7 +42,7 @@ public class User extends LongIdEntity {
         this.emailConfirmedAt = emailConfirmedAt;
     }
 
-    public UserUpdater userUpdater() {
+    public UserUpdater updater() {
         return new UserUpdater();
     }
 

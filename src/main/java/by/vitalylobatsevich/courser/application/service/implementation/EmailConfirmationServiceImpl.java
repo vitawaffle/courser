@@ -8,6 +8,7 @@ import by.vitalylobatsevich.courser.database.repository.EmailConfirmationTokenRe
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
 
 import io.vavr.control.Option;
+import io.vavr.collection.HashMap;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,15 +21,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.servlet.ModelAndView;
+
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -58,71 +58,55 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     @Override
     public void sendConfirmationEmail(final User user, final Locale locale) {
-        val emailConfirmationToken = emailConfirmationTokenRepository.save(
-                new EmailConfirmationToken(
-                        null,
+        val emailConfirmationToken
+                = emailConfirmationTokenRepository.save(new EmailConfirmationToken(null,
                         UUID.randomUUID().toString(),
                         user,
                         Instant.now().plusMillis(emailConfirmationTokenLifetime),
-                        Instant.now().plusMillis(emailConfirmationTokenResendDelay)
-                )
-        );
+                        Instant.now().plusMillis(emailConfirmationTokenResendDelay)));
 
         val context = new Context();
-        context.setVariable(
-                "emailConfirmationUrl",
-                applicationUrl
-                        + "/api/email-confirmation/confirm?token="
-                        + emailConfirmationToken.getToken()
-        );
+        context.setVariable("emailConfirmationUrl", applicationUrl
+                                                                + "/api/email-confirmation/confirm?token="
+                                                                + emailConfirmationToken.getToken());
         context.setVariable("lang", locale.getLanguage());
 
         val mimeMessage = mailSender.createMimeMessage();
         val mimeMessageHelper = new MimeMessageHelper(mimeMessage);
         try {
             mimeMessageHelper.setTo(user.getEmail());
-            mimeMessageHelper.setSubject(messageSource.getMessage(
-                    "email-confirmation.email.subject",
-                    null,
-                    locale
-            ));
-            mimeMessageHelper.setText(
-                    templateEngine.process("emails/confirmation-email", context),
-                    true
-            );
+            mimeMessageHelper.setSubject(messageSource.getMessage("email-confirmation.email.subject",
+                                                             null,
+                                                                  locale));
+            mimeMessageHelper.setText(templateEngine.process("emails/confirmation-email", context),
+                                true);
 
             mailSender.send(mimeMessage);
         } catch (final MessagingException messagingException) {
-            throw new SendingConfirmationEmailException(
-                    "Error of sending verification email message.",
-                    messagingException
-            );
+            throw new SendingConfirmationEmailException("Error of sending verification email message.",
+                                                        messagingException);
         }
     }
 
     @Override
     public ModelAndView confirmEmail(final String token, final Locale locale) {
-        val model = new HashMap<String, String>();
+        val model = HashMap.<String, String>empty();
         model.put("lang", locale.getLanguage());
 
         val emailConfirmationToken = emailConfirmationTokenRepository.findByToken(token);
         if (emailConfirmationToken.isEmpty()) {
-            model.put("errorMessage", messageSource.getMessage(
-                    "email-confirmation.error.invalid-link",
-                    null,
-                    locale
-            ));
-            return new ModelAndView("error", model);
+            model.put("errorMessage", messageSource.getMessage("email-confirmation.error.invalid-link",
+                                                          null,
+                                                               locale));
+            return new ModelAndView("error", model.toJavaMap());
         }
 
         val currentTime = Instant.now();
         if (emailConfirmationToken.get().getExpirationDate().compareTo(currentTime) <= 0) {
-            model.put("errorMessage", messageSource.getMessage(
-                    "email-confirmation.error.link-timeout",
-                    null,
-                    locale
-            ));
-            return new ModelAndView("error", model);
+            model.put("errorMessage", messageSource.getMessage("email-confirmation.error.link-timeout",
+                                                          null,
+                                                               locale));
+            return new ModelAndView("error", model.toJavaMap());
         }
 
         val user = emailConfirmationToken.get().getUser();
@@ -131,33 +115,31 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         emailConfirmationTokenRepository.delete(emailConfirmationToken.get());
 
-        return new ModelAndView("index", model);
+        return new ModelAndView("index", model.toJavaMap());
     }
 
     @Override
-    public ResponseEntity<String> resendConfirmationEmail(final String email, final Locale locale) {
-        val user = userRepository.findByEmail(email)
-                .getOrElseThrow(() -> new UsernameNotFoundException(email));
+    public ResponseEntity<Object> resendConfirmationEmail(final String email, final Locale locale) {
+        val user = userRepository.findByEmail(email).getOrElseThrow(() -> new UsernameNotFoundException(email));
+
         val emailConfirmationToken = emailConfirmationTokenRepository.findByUser(user);
         if (!emailConfirmationToken.isEmpty()) {
             if (Instant.now().isBefore(emailConfirmationToken.get().getCanBeResend())) {
-                return ResponseEntity.badRequest().body(messageSource.getMessage(
-                        "email-confirmation.error.can-be-resend",
-                        null,
-                        locale
-                ));
+                return ResponseEntity.badRequest().body(HashMap.of("canBeResend",
+                        messageSource.getMessage("email-confirmation.error.can-be-resend", null, locale)));
             }
             emailConfirmationTokenRepository.delete(emailConfirmationToken.get());
         }
+
         sendConfirmationEmail(user, locale);
-        return ResponseEntity.ok("");
+
+        return ResponseEntity.ok(null);
     }
 
     @Override
     public Option<Instant> whenCanBeResend(final String email) {
-        return emailConfirmationTokenRepository.findByUser(userRepository.findByEmail(email)
-                .getOrElseThrow(() -> new UsernameNotFoundException(email)))
-                .map(EmailConfirmationToken::getCanBeResend);
+        return emailConfirmationTokenRepository.findByUser(userRepository.findByEmail(email).getOrElseThrow(
+                () -> new UsernameNotFoundException(email))).map(EmailConfirmationToken::getCanBeResend);
     }
 
 }

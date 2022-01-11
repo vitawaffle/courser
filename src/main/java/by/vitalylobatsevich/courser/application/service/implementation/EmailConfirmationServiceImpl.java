@@ -19,6 +19,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,6 +58,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
     private final TemplateEngine templateEngine;
 
     @Override
+    @Async
     public void sendConfirmationEmail(final User user, final Locale locale) {
         val emailConfirmationToken = emailConfirmationTokenRepository.save(
                 new EmailConfirmationToken(

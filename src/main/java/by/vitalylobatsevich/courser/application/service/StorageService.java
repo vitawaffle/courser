@@ -1,7 +1,6 @@
 package by.vitalylobatsevich.courser.application.service;
 
 import io.vavr.collection.Seq;
-import io.vavr.control.Option;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,14 +9,14 @@ import java.nio.file.Path;
 
 public interface StorageService extends AppService {
 
-    void store(MultipartFile file);
+    String store(MultipartFile file);
 
     Seq<Path> loadAll();
 
-    Option<Path> loadByPath(String path);
+    Path loadByFilename(String filename);
 
-    Option<Resource> loadByPathAsResource(String path);
+    Resource loadByFilenameAsResource(String filename);
 
-    void deleteByPath(String path);
+    void deleteByFilename(String filename);
 
 }

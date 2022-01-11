@@ -9,7 +9,7 @@ public class FileFactoryImpl implements FileFactory {
     @Override
     public File createValidEntity() {
         return File.builder()
-                .path("file.test")
+                .name("file.test")
                 .user(User.builder().id(1L).build())
                 .build();
     }

@@ -48,11 +48,14 @@ public class AuthServiceImpl implements AuthService {
     public String signin(final SigninCredentialsDTO signinCredentialsDTO, final Locale locale) {
         applicationEventPublisher.publishEvent(
                 SigninEvent.signinEventBuilder().locale(locale).user(
-                        userRepository.save(User.builder()
-                                .email(signinCredentialsDTO.getEmail())
-                                .password(passwordEncoder.encode(signinCredentialsDTO.getPassword()))
-                                .roles(List.of(Role.builder().id(1L).build())).build())
-                )
+                        userRepository.save(
+                                User.builder()
+                                        .email(signinCredentialsDTO.getEmail())
+                                        .password(passwordEncoder.encode(signinCredentialsDTO.getPassword()))
+                                        .roles(List.of(Role.builder().id(1L).build()))
+                                        .build()
+                        )
+                ).build()
         );
 
         return login(new LoginCredentialsDTO(signinCredentialsDTO));

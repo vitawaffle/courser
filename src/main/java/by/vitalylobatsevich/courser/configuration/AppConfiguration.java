@@ -6,9 +6,11 @@ import io.vavr.jackson.datatype.VavrModule;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
-public class CourserConfiguration {
+@EnableAsync
+public class AppConfiguration {
 
     @Bean
     public Module vavrModule() {

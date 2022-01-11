@@ -14,15 +14,15 @@ import javax.persistence.Table;
 @ToString(exclude = "user")
 public class File extends LongIdEntity {
 
-    private String path;
+    private String name;
 
     @ManyToOne
     private User user;
 
     @Builder
-    public File(final Long id, final String path, final User user) {
+    public File(final Long id, final String name, final User user) {
         super(id);
-        this.path = path;
+        this.name = name;
         this.user = user;
     }
 
@@ -37,8 +37,8 @@ public class File extends LongIdEntity {
             return this;
         }
 
-        public FileUpdater path(final String path) {
-            File.this.path = path;
+        public FileUpdater name(final String name) {
+            File.this.name = name;
             return this;
         }
 

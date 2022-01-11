@@ -51,7 +51,7 @@ class FileRepositoryTests {
                 () -> fileRepository.save(
                         fileFactory.createValidEntity()
                                 .updater()
-                                .path(null)
+                                .name(null)
                                 .update()
                 )
         );

@@ -12,6 +12,7 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,34 +51,35 @@ public class NameServiceImpl implements NameService {
 
     @Override
     public void save(final NameDTO nameDTO, final String username) {
-        save(Name.builder()
-                .firstName(nameDTO.getFirstName())
-                .lastName(nameDTO.getLastName())
-                .patronymic(nameDTO.getPatronymic())
-                .id(NameId.builder()
-                        .languageId(nameDTO.getLanguageId())
-                        .userId(userRepository.findByEmail(username)
-                                .getOrElseThrow(() -> new UsernameNotFoundException(username)).getId())
-                        .build())
-                .language(Language.builder().id(nameDTO.getLanguageId()).build())
-                .user(userRepository.findByEmail(username)
-                                    .getOrElseThrow(() -> new UsernameNotFoundException(username)))
-                .build());
+        val user = userRepository.findByEmail(username)
+                .getOrElseThrow(() -> new UsernameNotFoundException(username));
+        save(
+                Name.builder()
+                        .firstName(nameDTO.getFirstName())
+                        .lastName(nameDTO.getLastName())
+                        .patronymic(nameDTO.getPatronymic())
+                        .id(NameId.builder().languageId(nameDTO.getLanguageId()).userId(user.getId()).build())
+                        .language(Language.builder().id(nameDTO.getLanguageId()).build())
+                        .user(user)
+                        .build()
+        );
     }
 
     @Override
     public Seq<NameDTO> getByUsername(final String username) {
-        return nameRepository.findByUser(userRepository.findByEmail(username)
-                                                       .getOrElseThrow(() -> new UsernameNotFoundException(username)))
-                             .map(NameDTO::new);
+        return nameRepository.findByUser(
+                userRepository.findByEmail(username).getOrElseThrow(() -> new UsernameNotFoundException(username))
+        ).map(NameDTO::new);
     }
 
     @Override
     public void delete(final Long languageId, final String username) {
-        deleteById(new NameId(languageId,
-                              userRepository.findByEmail(username)
-                                            .getOrElseThrow(() -> new UsernameNotFoundException(username))
-                                            .getId()));
+        deleteById(new NameId(
+                languageId,
+                userRepository.findByEmail(username)
+                        .getOrElseThrow(() -> new UsernameNotFoundException(username))
+                        .getId()
+        ));
     }
 
 }

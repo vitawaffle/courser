@@ -58,33 +58,43 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     @Override
     public void sendConfirmationEmail(final User user, final Locale locale) {
-        val emailConfirmationToken
-                = emailConfirmationTokenRepository.save(new EmailConfirmationToken(null,
+        val emailConfirmationToken = emailConfirmationTokenRepository.save(
+                new EmailConfirmationToken(
+                        null,
                         UUID.randomUUID().toString(),
                         user,
                         Instant.now().plusMillis(emailConfirmationTokenLifetime),
-                        Instant.now().plusMillis(emailConfirmationTokenResendDelay)));
+                        Instant.now().plusMillis(emailConfirmationTokenResendDelay)
+                )
+        );
 
         val context = new Context();
-        context.setVariable("emailConfirmationUrl", applicationUrl
-                                                                + "/api/email-confirmation/confirm?token="
-                                                                + emailConfirmationToken.getToken());
+        context.setVariable(
+                "emailConfirmationUrl",
+                applicationUrl + "/api/email-confirmation/confirm?token=" + emailConfirmationToken.getToken()
+        );
         context.setVariable("lang", locale.getLanguage());
 
         val mimeMessage = mailSender.createMimeMessage();
         val mimeMessageHelper = new MimeMessageHelper(mimeMessage);
         try {
             mimeMessageHelper.setTo(user.getEmail());
-            mimeMessageHelper.setSubject(messageSource.getMessage("email-confirmation.email.subject",
-                                                             null,
-                                                                  locale));
-            mimeMessageHelper.setText(templateEngine.process("emails/confirmation-email", context),
-                                true);
+            mimeMessageHelper.setSubject(messageSource.getMessage(
+                    "email-confirmation.email.subject",
+                    null,
+                    locale
+            ));
+            mimeMessageHelper.setText(
+                    templateEngine.process("emails/confirmation-email", context),
+                    true
+            );
 
             mailSender.send(mimeMessage);
         } catch (final MessagingException messagingException) {
-            throw new SendingConfirmationEmailException("Error of sending verification email message.",
-                                                        messagingException);
+            throw new SendingConfirmationEmailException(
+                    "Error of sending verification email message.",
+                    messagingException
+            );
         }
     }
 
@@ -95,17 +105,21 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         val emailConfirmationToken = emailConfirmationTokenRepository.findByToken(token);
         if (emailConfirmationToken.isEmpty()) {
-            model.put("errorMessage", messageSource.getMessage("email-confirmation.error.invalid-link",
-                                                          null,
-                                                               locale));
+            model.put("errorMessage", messageSource.getMessage(
+                    "email-confirmation.error.invalid-link",
+                    null,
+                    locale
+            ));
             return new ModelAndView("error", model.toJavaMap());
         }
 
         val currentTime = Instant.now();
         if (emailConfirmationToken.get().getExpirationDate().compareTo(currentTime) <= 0) {
-            model.put("errorMessage", messageSource.getMessage("email-confirmation.error.link-timeout",
-                                                          null,
-                                                               locale));
+            model.put("errorMessage", messageSource.getMessage(
+                    "email-confirmation.error.link-timeout",
+                    null,
+                    locale
+            ));
             return new ModelAndView("error", model.toJavaMap());
         }
 
@@ -125,8 +139,11 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
         val emailConfirmationToken = emailConfirmationTokenRepository.findByUser(user);
         if (!emailConfirmationToken.isEmpty()) {
             if (Instant.now().isBefore(emailConfirmationToken.get().getCanBeResend())) {
-                return ResponseEntity.badRequest().body(HashMap.of("canBeResend",
-                        messageSource.getMessage("email-confirmation.error.can-be-resend", null, locale)));
+                return ResponseEntity.badRequest().body(HashMap.of("canBeResend", messageSource.getMessage(
+                        "email-confirmation.error.can-be-resend",
+                        null,
+                        locale
+                )));
             }
             emailConfirmationTokenRepository.delete(emailConfirmationToken.get());
         }
@@ -138,8 +155,9 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     @Override
     public Option<Instant> whenCanBeResend(final String email) {
-        return emailConfirmationTokenRepository.findByUser(userRepository.findByEmail(email).getOrElseThrow(
-                () -> new UsernameNotFoundException(email))).map(EmailConfirmationToken::getCanBeResend);
+        return emailConfirmationTokenRepository.findByUser(
+                userRepository.findByEmail(email).getOrElseThrow(() -> new UsernameNotFoundException(email))
+        ).map(EmailConfirmationToken::getCanBeResend);
     }
 
 }

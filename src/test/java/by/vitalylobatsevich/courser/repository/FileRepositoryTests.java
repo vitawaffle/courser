@@ -4,7 +4,9 @@ import by.vitalylobatsevich.courser.database.entity.File;
 import by.vitalylobatsevich.courser.database.repository.FileRepository;
 import by.vitalylobatsevich.courser.factory.FileFactory;
 import by.vitalylobatsevich.courser.factory.implementation.FileFactoryImpl;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -46,7 +48,12 @@ class FileRepositoryTests {
     void save_NotValidEntity_ShouldThrowsException() {
         assertThrows(
                 Exception.class,
-                () -> fileRepository.save(fileFactory.createValidEntity().updater().path(null).update())
+                () -> fileRepository.save(
+                        fileFactory.createValidEntity()
+                                .updater()
+                                .path(null)
+                                .update()
+                )
         );
     }
 

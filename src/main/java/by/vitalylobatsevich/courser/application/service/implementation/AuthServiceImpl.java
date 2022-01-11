@@ -51,7 +51,9 @@ public class AuthServiceImpl implements AuthService {
                         userRepository.save(User.builder()
                                 .email(signinCredentialsDTO.getEmail())
                                 .password(passwordEncoder.encode(signinCredentialsDTO.getPassword()))
-                                .roles(List.of(Role.builder().id(1L).build())).build())));
+                                .roles(List.of(Role.builder().id(1L).build())).build())
+                )
+        );
 
         return login(new LoginCredentialsDTO(signinCredentialsDTO));
     }
@@ -59,7 +61,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String login(final LoginCredentialsDTO loginCredentialsDTO) {
         val authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginCredentialsDTO.getEmail(), loginCredentialsDTO.getPassword()));
+                loginCredentialsDTO.getEmail(),
+                loginCredentialsDTO.getPassword()
+        ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -67,18 +71,26 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<Object> changePassword(final ChangePasswordDTO changePasswordDTO,
-                                                 final String email,
-                                                 final Locale locale) {
+    public ResponseEntity<Object> changePassword(
+            final ChangePasswordDTO changePasswordDTO,
+            final String email,
+            final Locale locale
+    ) {
         val user = userRepository.findByEmail(email).getOrElseThrow(() -> new UsernameNotFoundException(email));
 
         if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body(HashMap.of("oldPassword",
-                    messageSource.getMessage("validation.old-password", null, locale)));
+            return ResponseEntity.status(401).body(HashMap.of("oldPassword", messageSource.getMessage(
+                    "validation.old-password",
+                    null,
+                    locale
+            )));
         }
 
-        userRepository.save(user.updater().password(
-                passwordEncoder.encode(changePasswordDTO.getNewPassword())).update());
+        userRepository.save(
+                user.updater()
+                        .password(passwordEncoder.encode(changePasswordDTO.getNewPassword()))
+                        .update()
+        );
 
         return ResponseEntity.ok(null);
     }

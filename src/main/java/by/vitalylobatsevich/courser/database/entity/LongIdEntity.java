@@ -24,8 +24,8 @@ public abstract class LongIdEntity extends AppEntity {
     @Override
     public boolean equals(final Object obj) {
         return this.getClass().equals(obj.getClass())
-            && this.id != null
-            && this.id.equals(((LongIdEntity) obj).getId());
+                && this.id != null
+                && this.id.equals(((LongIdEntity) obj).getId());
     }
 
 }

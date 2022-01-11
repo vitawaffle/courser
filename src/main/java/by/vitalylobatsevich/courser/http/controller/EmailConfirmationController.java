@@ -5,7 +5,6 @@ import by.vitalylobatsevich.courser.application.service.EmailConfirmationService
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,26 +16,26 @@ import java.time.Instant;
 @RequestMapping("/api/email-confirmation")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class EmailConfirmationController {
+public class EmailConfirmationController extends AppRestController {
 
     private final EmailConfirmationService emailConfirmationService;
 
     @GetMapping("/confirm")
-    public ModelAndView confirm(@RequestParam("token") final String token,
-                                final HttpServletRequest request) {
+    public ModelAndView confirm(
+            @RequestParam("token") final String token,
+            final HttpServletRequest request
+    ) {
         return emailConfirmationService.confirmEmail(token, request.getLocale());
     }
 
     @PostMapping("/resend")
     public ResponseEntity<Object> resend(final HttpServletRequest request) {
-        return emailConfirmationService.resendConfirmationEmail(
-                SecurityContextHolder.getContext().getAuthentication().getName(), request.getLocale());
+        return emailConfirmationService.resendConfirmationEmail(getUsername(), request.getLocale());
     }
 
     @GetMapping("/can-be-resend")
     public Instant getCanBeResend() {
-        return emailConfirmationService.whenCanBeResend(
-                SecurityContextHolder.getContext().getAuthentication().getName()).getOrNull();
+        return emailConfirmationService.whenCanBeResend(getUsername()).getOrNull();
     }
 
 }

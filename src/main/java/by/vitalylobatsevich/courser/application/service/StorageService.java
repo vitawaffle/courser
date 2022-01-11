@@ -2,6 +2,7 @@ package by.vitalylobatsevich.courser.application.service;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
+
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

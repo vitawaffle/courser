@@ -7,7 +7,6 @@ import io.vavr.collection.Seq;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,23 +15,23 @@ import javax.validation.Valid;
 @RequestMapping("/api/names")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class NameController {
+public class NameController extends AppRestController {
 
     private final NameService nameService;
 
     @GetMapping("/me")
     public Seq<NameDTO> getMe() {
-        return nameService.getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        return nameService.getByUsername(getUsername());
     }
 
     @PostMapping("/me")
     public void saveMe(@RequestBody @Valid final NameDTO nameDTO) {
-        nameService.save(nameDTO, SecurityContextHolder.getContext().getAuthentication().getName());
+        nameService.save(nameDTO, getUsername());
     }
 
     @DeleteMapping("/me/{languageId}")
     public void deleteMe(@PathVariable final Long languageId) {
-        nameService.delete(languageId, SecurityContextHolder.getContext().getAuthentication().getName());
+        nameService.delete(languageId, getUsername());
     }
 
 }

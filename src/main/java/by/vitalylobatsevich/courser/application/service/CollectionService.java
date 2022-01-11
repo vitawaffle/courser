@@ -5,7 +5,7 @@ import by.vitalylobatsevich.courser.database.entity.AppEntity;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
-public interface CollectionService<T extends AppEntity, ID> extends Service {
+public interface CollectionService<T extends AppEntity, ID> extends AppService {
 
     Seq<T> getAll();
 

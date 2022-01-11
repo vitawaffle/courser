@@ -12,4 +12,6 @@ public interface NameService extends CollectionService<Name, NameId> {
 
     Seq<NameDTO> getByUsername(String username);
 
+    void delete(Long languageId, String username);
+
 }

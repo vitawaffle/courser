@@ -124,4 +124,18 @@
         <addPrimaryKey tableName="names" columnNames="language_id, user_id" />
     </changeSet>
 
+    <changeSet id="create_files_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="default">
+        <createTable tableName="files">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="path" type="text">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints referencedTableName="users" referencedColumnNames="id" foreignKeyName="files_user_id_fk" />
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

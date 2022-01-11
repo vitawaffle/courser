@@ -24,3 +24,4 @@ courser.default-language=<en|ru>
 courser.email-confirmation.token.lifetime=<your-value>
 courser.email-confirmation.token.resend-delay=<your-value>
 courser.application-url=<application-url>
+courser.storage.root-location=<uploaded_files_root_location>

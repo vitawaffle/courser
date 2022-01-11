@@ -30,4 +30,9 @@ public class NameController {
         nameService.save(nameDTO, SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
+    @DeleteMapping("/me/{languageId}")
+    public void deleteMe(@PathVariable final Long languageId) {
+        nameService.delete(languageId, SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
 }

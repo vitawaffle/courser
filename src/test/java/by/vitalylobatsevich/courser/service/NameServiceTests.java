@@ -130,4 +130,19 @@ class NameServiceTests {
         assertThrows(UsernameNotFoundException.class, () -> nameService.getByUsername(""));
     }
 
+    @Test
+    void delete_ExistingLanguageIdAndUsername_ShouldDoesNotThrow() {
+        assertDoesNotThrow(() -> nameService.delete(1L, "test.email@test.org"));
+    }
+
+    @Test
+    void delete_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
+        assertThrows(UsernameNotFoundException.class, () -> nameService.delete(1L, ""));
+    }
+
+    @Test
+    void delete_NotExistingLanguageId_ShouldDoesNotThrow() {
+        assertDoesNotThrow(() -> nameService.delete(0L, "test.email@test.org"));
+    }
+
 }

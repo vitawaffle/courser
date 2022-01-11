@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.Instant;
 import java.util.Locale;
 
-public interface EmailConfirmationService extends Service {
+public interface EmailConfirmationService extends AppService {
 
     void sendConfirmationEmail(User user, Locale locale);
 

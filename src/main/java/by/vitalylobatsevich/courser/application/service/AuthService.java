@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Locale;
 
-public interface AuthService extends Service {
+public interface AuthService extends AppService {
 
     String signin(SigninCredentialsDTO signinCredentialsDTO, Locale locale);
 

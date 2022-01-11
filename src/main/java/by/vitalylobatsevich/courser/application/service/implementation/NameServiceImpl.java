@@ -68,8 +68,16 @@ public class NameServiceImpl implements NameService {
     @Override
     public Seq<NameDTO> getByUsername(final String username) {
         return nameRepository.findByUser(userRepository.findByEmail(username)
-                        .getOrElseThrow(() -> new UsernameNotFoundException(username)))
-                .map(NameDTO::new);
+                                                       .getOrElseThrow(() -> new UsernameNotFoundException(username)))
+                             .map(NameDTO::new);
+    }
+
+    @Override
+    public void delete(final Long languageId, final String username) {
+        deleteById(new NameId(languageId,
+                              userRepository.findByEmail(username)
+                                            .getOrElseThrow(() -> new UsernameNotFoundException(username))
+                                            .getId()));
     }
 
 }

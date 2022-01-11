@@ -80,4 +80,19 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_test_files" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="test">
+        <insert tableName="files">
+            <column name="path" value="file1.test" />
+            <column name="user_id" value="1" />
+        </insert>
+        <insert tableName="files">
+            <column name="path" value="file2.test" />
+            <column name="user_id" value="1" />
+        </insert>
+        <insert tableName="files">
+            <column name="path" value="file3.test" />
+            <column name="user_id" value="1" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

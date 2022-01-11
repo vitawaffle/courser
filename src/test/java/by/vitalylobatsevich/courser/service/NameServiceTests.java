@@ -68,6 +68,10 @@ class NameServiceTests {
                 .when(nameRepository)
                 .deleteById(new NameId(0L, 0L));
         Mockito.lenient()
+                .when(nameRepository.findByUser(User.builder().id(1L).build()))
+                .thenReturn(List.of(Name.builder().id(new NameId(1L, 1L)).build()));
+
+        Mockito.lenient()
                 .when(userRepository.findByEmail("test.email@test.org"))
                 .thenReturn(Option.of(User.builder().id(1L).build()));
         Mockito.lenient()
@@ -114,6 +118,16 @@ class NameServiceTests {
     void save_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
         assertThrows(UsernameNotFoundException.class,
                      () -> nameService.save(nameDTOFactory.createValidEntity(), ""));
+    }
+
+    @Test
+    void getByUsername_ExistingUsername_ShouldReturnNotEmpty() {
+        assertFalse(() -> nameService.getByUsername("test.email@test.org").isEmpty());
+    }
+
+    @Test
+    void getByUsername_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
+        assertThrows(UsernameNotFoundException.class, () -> nameService.getByUsername(""));
     }
 
 }

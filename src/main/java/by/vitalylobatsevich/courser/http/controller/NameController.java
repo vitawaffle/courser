@@ -1,9 +1,10 @@
 package by.vitalylobatsevich.courser.http.controller;
 
 import by.vitalylobatsevich.courser.application.service.NameService;
-import by.vitalylobatsevich.courser.database.entity.Name;
-
 import by.vitalylobatsevich.courser.http.dto.NameDTO;
+
+import io.vavr.collection.Seq;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +20,14 @@ public class NameController {
 
     private final NameService nameService;
 
-    @PostMapping
-    public Name save(@RequestBody @Valid final NameDTO nameDTO) {
-        return nameService.save(nameDTO, SecurityContextHolder.getContext().getAuthentication().getName());
+    @GetMapping("/me")
+    public Seq<NameDTO> getMe() {
+        return nameService.getByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @PostMapping("/me")
+    public void saveMe(@RequestBody @Valid final NameDTO nameDTO) {
+        nameService.save(nameDTO, SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
 }

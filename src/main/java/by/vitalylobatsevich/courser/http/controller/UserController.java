@@ -21,8 +21,7 @@ public class UserController {
 
     @GetMapping("/me")
     public User getMe() {
-        return userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
-                .getOrNull();
+        return userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).getOrNull();
     }
 
 }

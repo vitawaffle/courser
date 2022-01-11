@@ -49,16 +49,27 @@ public class NameServiceImpl implements NameService {
     }
 
     @Override
-    public Name save(final NameDTO nameDTO, final String username) {
-        return save(
-                Name.builder()
-                        .firstName(nameDTO.getFirstName())
-                        .lastName(nameDTO.getLastName())
-                        .patronymic(nameDTO.getPatronymic())
-                        .language(Language.builder().id(nameDTO.getLanguageId()).build())
-                        .user(userRepository.findByEmail(username)
-                                .getOrElseThrow(() -> new UsernameNotFoundException(username)))
-                        .build());
+    public void save(final NameDTO nameDTO, final String username) {
+        save(Name.builder()
+                .firstName(nameDTO.getFirstName())
+                .lastName(nameDTO.getLastName())
+                .patronymic(nameDTO.getPatronymic())
+                .id(NameId.builder()
+                        .languageId(nameDTO.getLanguageId())
+                        .userId(userRepository.findByEmail(username)
+                                .getOrElseThrow(() -> new UsernameNotFoundException(username)).getId())
+                        .build())
+                .language(Language.builder().id(nameDTO.getLanguageId()).build())
+                .user(userRepository.findByEmail(username)
+                                    .getOrElseThrow(() -> new UsernameNotFoundException(username)))
+                .build());
+    }
+
+    @Override
+    public Seq<NameDTO> getByUsername(final String username) {
+        return nameRepository.findByUser(userRepository.findByEmail(username)
+                        .getOrElseThrow(() -> new UsernameNotFoundException(username)))
+                .map(NameDTO::new);
     }
 
 }

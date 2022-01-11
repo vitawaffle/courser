@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.http.dto;
 
 import by.vitalylobatsevich.courser.application.validation.ExistingLanguageId;
+import by.vitalylobatsevich.courser.database.entity.Name;
 
 import lombok.*;
 
@@ -22,5 +23,12 @@ public class NameDTO extends DTO {
     @NotNull(message = "{validation.not-null}")
     @ExistingLanguageId(message = "{validation.existing-language-id}")
     private Long languageId;
+
+    public NameDTO(final Name name) {
+        this.firstName = name.getFirstName();
+        this.lastName = name.getLastName();
+        this.patronymic = name.getPatronymic();
+        this.languageId = name.getId().getLanguageId();
+    }
 
 }

@@ -21,4 +21,11 @@ public abstract class LongIdEntity extends AppEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Override
+    public boolean equals(final Object obj) {
+        return this.getClass().equals(obj.getClass())
+            && this.id != null
+            && this.id.equals(((LongIdEntity) obj).getId());
+    }
+
 }

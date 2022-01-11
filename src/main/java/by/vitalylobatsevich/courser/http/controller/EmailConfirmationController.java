@@ -22,13 +22,13 @@ public class EmailConfirmationController {
     private final EmailConfirmationService emailConfirmationService;
 
     @GetMapping("/confirm")
-    public ModelAndView confirmEmail(@RequestParam("token") final String token,
-                                     final HttpServletRequest request) {
+    public ModelAndView confirm(@RequestParam("token") final String token,
+                                final HttpServletRequest request) {
         return emailConfirmationService.confirmEmail(token, request.getLocale());
     }
 
     @PostMapping("/resend")
-    public ResponseEntity<Object> resendConfirmationEmail(final HttpServletRequest request) {
+    public ResponseEntity<Object> resend(final HttpServletRequest request) {
         return emailConfirmationService.resendConfirmationEmail(
                 SecurityContextHolder.getContext().getAuthentication().getName(), request.getLocale());
     }

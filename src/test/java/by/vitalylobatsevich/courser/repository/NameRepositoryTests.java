@@ -2,6 +2,7 @@ package by.vitalylobatsevich.courser.repository;
 
 import by.vitalylobatsevich.courser.database.entity.Name;
 import by.vitalylobatsevich.courser.database.entity.NameId;
+import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.NameRepository;
 import by.vitalylobatsevich.courser.factory.NameFactory;
 import by.vitalylobatsevich.courser.factory.implementation.NameFactoryImpl;
@@ -73,6 +74,21 @@ class NameRepositoryTests {
     void deleteById_NotExistingId_ShouldThrowsEmptyResultDataAccessException() {
         assertThrows(EmptyResultDataAccessException.class,
                      () -> nameRepository.deleteById(new NameId(0L, 0L)));
+    }
+
+    @Test
+    void findByUser_UserWithExistingIdAndNames_ShouldReturnNotEmpty() {
+        assertFalse(nameRepository.findByUser(User.builder().id(1L).build()).isEmpty());
+    }
+
+    @Test
+    void findByUser_UserWithNotExistingId_ShouldReturnEmpty() {
+        assertTrue(nameRepository.findByUser(User.builder().id(0L).build()).isEmpty());
+    }
+
+    @Test
+    void findByUser_UserWithExistingIdAndWithoutNames_ShouldReturnEmpty() {
+        assertTrue(nameRepository.findByUser(User.builder().id(2L).build()).isEmpty());
     }
 
 }

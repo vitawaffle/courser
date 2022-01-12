@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FileRepository extends AppRepository<File, Long> {
+
+    boolean existsById(Long id);
+
 }

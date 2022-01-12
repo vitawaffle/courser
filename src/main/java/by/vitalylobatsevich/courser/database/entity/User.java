@@ -31,19 +31,25 @@ public class User extends LongIdEntity {
 
     private Instant emailConfirmedAt;
 
+    @ManyToOne
+    @ToString.Exclude
+    private Avatar avatar;
+
     @Builder
     public User(
             final Long id,
             final String email,
             final String password,
             final Collection<Role> roles,
-            final Instant emailConfirmedAt
+            final Instant emailConfirmedAt,
+            final Avatar avatar
     ) {
         super(id);
         this.email = email;
         this.password = password;
         this.roles = roles;
         this.emailConfirmedAt = emailConfirmedAt;
+        this.avatar = avatar;
     }
 
     public UserUpdater updater() {
@@ -74,6 +80,11 @@ public class User extends LongIdEntity {
 
         public UserUpdater emailConfirmedAt(final Instant emailConfirmedAt) {
             User.this.emailConfirmedAt = emailConfirmedAt;
+            return this;
+        }
+
+        public UserUpdater avatar(final Avatar avatar) {
+            User.this.avatar = avatar;
             return this;
         }
 

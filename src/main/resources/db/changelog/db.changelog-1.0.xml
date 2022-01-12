@@ -45,6 +45,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="email_confirmed_at" type="timestamp" />
+            <column name="avatar_id" type="bigint" />
         </createTable>
     </changeSet>
 
@@ -153,6 +154,8 @@
             </column>
         </createTable>
         <addUniqueConstraint tableName="avatars" columnNames="user_id, file_id" />
+        <addForeignKeyConstraint baseTableName="users" baseColumnNames="avatar_id" constraintName="users_avatar_id_fk"
+                                 referencedTableName="avatars" referencedColumnNames="id" />
     </changeSet>
 
 </databaseChangeLog>

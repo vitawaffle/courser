@@ -79,4 +79,14 @@ class FileRepositoryTests {
         assertThrows(EmptyResultDataAccessException.class, () -> fileRepository.deleteById(0L));
     }
 
+    @Test
+    void existsById_ExistingId_ShouldReturnTrue() {
+        assertTrue(fileRepository.existsById(1L));
+    }
+
+    @Test
+    void existsById_NotExistingId_ShouldReturnFalse() {
+        assertFalse(fileRepository.existsById(0L));
+    }
+
 }

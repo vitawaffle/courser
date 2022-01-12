@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,15 @@ public class AvatarServiceImpl implements AvatarService {
                         .file(file)
                         .build()
         ));
+    }
+
+    public ResponseEntity<?> setCurrent(final Long id, final String username) {
+        val user  = userRepository.findByEmail(username)
+                .getOrElseThrow(() -> new UsernameNotFoundException(username));
+        return avatarRepository.findByIdAndUser(id, user).map(avatar -> {
+            userRepository.save(user.updater().avatar(avatar).update());
+            return ResponseEntity.ok(null);
+        }).getOrElse(ResponseEntity.notFound().build());
     }
 
 }

@@ -95,4 +95,11 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_test_avatars" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="test">
+        <insert tableName="avatars">
+            <column name="user_id" value="1" />
+            <column name="file_id" value="1" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

@@ -138,4 +138,21 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_avatars_table" author="Vitaly Lobatsevich (vitaly.lobatsevich@gmail.com)" context="default">
+        <createTable tableName="avatars">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" referencedTableName="users" referencedColumnNames="id"
+                             foreignKeyName="avatars_user_id_fk" />
+            </column>
+            <column name="file_id" type="bigint">
+                <constraints nullable="false" referencedTableName="files" referencedColumnNames="id"
+                             foreignKeyName="avatars_file_id_fk" />
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="avatars" columnNames="user_id, file_id" />
+    </changeSet>
+
 </databaseChangeLog>

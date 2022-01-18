@@ -16,26 +16,23 @@ import java.time.Instant;
 @RequestMapping("/api/email-confirmation")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class EmailConfirmationController extends AppRestController {
+public class EmailConfirmationController {
 
     private final EmailConfirmationService emailConfirmationService;
 
     @GetMapping("/confirm")
-    public ModelAndView confirm(
-            @RequestParam("token") final String token,
-            final HttpServletRequest request
-    ) {
+    public ModelAndView confirm(@RequestParam("token") final String token, final HttpServletRequest request) {
         return emailConfirmationService.confirmEmail(token, request.getLocale());
     }
 
     @PostMapping("/resend")
-    public ResponseEntity<Object> resend(final HttpServletRequest request) {
-        return emailConfirmationService.resendConfirmationEmail(getUsername(), request.getLocale());
+    public ResponseEntity<?> resend(final HttpServletRequest request) {
+        return emailConfirmationService.resendConfirmationEmail(request.getLocale());
     }
 
     @GetMapping("/can-be-resend")
     public Instant getCanBeResend() {
-        return emailConfirmationService.whenCanBeResend(getUsername()).getOrNull();
+        return emailConfirmationService.whenCanBeResend().getOrNull();
     }
 
 }

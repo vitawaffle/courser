@@ -7,7 +7,6 @@ import by.vitalylobatsevich.courser.http.dto.SigninCredentialsDTO;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class AuthController extends AppRestController {
+public class AuthController {
 
     private final AuthService authService;
 
@@ -35,11 +34,8 @@ public class AuthController extends AppRestController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<Object> changePassword(
-            @RequestBody @Valid final ChangePasswordDTO changePasswordDTO,
-            final HttpServletRequest request
-    ) {
-        return authService.changePassword(changePasswordDTO, getUsername(), request.getLocale());
+    public void changePassword(@RequestBody @Valid final ChangePasswordDTO changePasswordDTO) {
+        authService.changePassword(changePasswordDTO);
     }
 
 }

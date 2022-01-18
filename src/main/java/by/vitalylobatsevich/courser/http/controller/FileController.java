@@ -12,13 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/files")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class FileController extends AppRestController {
+public class FileController {
 
     private final FileService fileService;
 
     @PostMapping
     public File store(@RequestParam("file") MultipartFile file) {
-        return fileService.store(file, getUsername());
+        return fileService.storeForCurrentUser(file);
     }
 
 }

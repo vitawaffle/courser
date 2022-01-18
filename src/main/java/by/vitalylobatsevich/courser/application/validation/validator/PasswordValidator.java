@@ -15,7 +15,7 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
     @Override
     public boolean isValid(final String value, final ConstraintValidatorContext context) {
-        return passwordValidationConfigurator.getActiveRules()
+        return value == null || passwordValidationConfigurator.getActiveRules()
                 .filter(rule -> !rule.isValid(value))
                 .isEmpty();
     }

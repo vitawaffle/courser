@@ -30,7 +30,7 @@ public class File extends LongIdEntity {
         return new FileUpdater();
     }
 
-    public class FileUpdater implements Updater {
+    public class FileUpdater implements Updater<File> {
 
         public FileUpdater id(final Long id) {
             setId(id);

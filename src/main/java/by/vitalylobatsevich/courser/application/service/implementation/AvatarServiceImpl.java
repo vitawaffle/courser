@@ -1,22 +1,23 @@
 package by.vitalylobatsevich.courser.application.service.implementation;
 
+import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.application.service.AvatarService;
+import by.vitalylobatsevich.courser.application.service.FileService;
+import by.vitalylobatsevich.courser.application.service.StorageService;
 import by.vitalylobatsevich.courser.database.entity.Avatar;
+import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.AvatarRepository;
-import by.vitalylobatsevich.courser.database.repository.FileRepository;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
-import by.vitalylobatsevich.courser.http.dto.AvatarDTO;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
+import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,11 @@ public class AvatarServiceImpl implements AvatarService {
 
     private final UserRepository userRepository;
 
-    private final FileRepository fileRepository;
+    private final FileService fileService;
+
+    private final AuthService authService;
+
+    private final StorageService storageService;
 
     @Override
     public Seq<Avatar> getAll() {
@@ -52,24 +57,49 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public void add(final AvatarDTO avatarDTO, final String username) {
-        val user = userRepository.findByEmail(username)
-                .getOrElseThrow(() -> new UsernameNotFoundException(username));
-        fileRepository.findById(avatarDTO.getFileId()).peek(file -> avatarRepository.save(
-                Avatar.builder()
-                        .user(user)
-                        .file(file)
-                        .build()
-        ));
+    public Option<Resource> loadCurrent(final User user) {
+        return Option.of(user.getAvatar())
+                .map(avatar -> storageService.loadByFilenameAsResource(avatar.getFile().getName()));
     }
 
-    public ResponseEntity<?> setCurrent(final Long id, final String username) {
-        val user  = userRepository.findByEmail(username)
-                .getOrElseThrow(() -> new UsernameNotFoundException(username));
-        return avatarRepository.findByIdAndUser(id, user).map(avatar -> {
-            userRepository.save(user.updater().avatar(avatar).update());
-            return ResponseEntity.ok(null);
-        }).getOrElse(ResponseEntity.notFound().build());
+    @Override
+    public Option<Resource> loadCurrentForCurrentUser() {
+        return loadCurrent(authService.getUser());
+    }
+
+    @Override
+    public Avatar store(final MultipartFile file, final User user) {
+        return save(
+                Avatar.builder()
+                        .user(user)
+                        .file(fileService.store(file, user))
+                        .build()
+        );
+    }
+
+    @Override
+    public Avatar storeForCurrentUser(final MultipartFile file) {
+        return store(file, authService.getUser());
+    }
+
+    @Override
+    public void setCurrent(final Avatar avatar, final User user) {
+        userRepository.save(user.updater().avatar(avatar).update());
+    }
+
+    @Override
+    public void setCurrentForCurrentUser(final Avatar avatar) {
+        setCurrent(avatar, authService.getUser());
+    }
+
+    @Override
+    public void set(final MultipartFile file, final User user) {
+        setCurrent(store(file, user), user);
+    }
+
+    @Override
+    public void setForCurrentUser(final MultipartFile file) {
+        setCurrentForCurrentUser(storeForCurrentUser(file));
     }
 
 }

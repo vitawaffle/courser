@@ -15,23 +15,23 @@ import javax.validation.Valid;
 @RequestMapping("/api/names")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class NameController extends AppRestController {
+public class NameController {
 
     private final NameService nameService;
 
     @GetMapping("/me")
     public Seq<NameDTO> getMe() {
-        return nameService.getByUsername(getUsername());
+        return nameService.getAllForCurrentUser();
     }
 
     @PostMapping("/me")
     public void saveMe(@RequestBody @Valid final NameDTO nameDTO) {
-        nameService.save(nameDTO, getUsername());
+        nameService.saveForCurrentUser(nameDTO);
     }
 
     @DeleteMapping("/me/{languageId}")
     public void deleteMe(@PathVariable final Long languageId) {
-        nameService.delete(languageId, getUsername());
+        nameService.deleteByLanguageIdForCurrentUser(languageId);
     }
 
 }

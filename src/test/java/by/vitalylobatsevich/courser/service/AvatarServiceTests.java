@@ -1,17 +1,19 @@
 package by.vitalylobatsevich.courser.service;
 
+import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.application.service.AvatarService;
+import by.vitalylobatsevich.courser.application.service.FileService;
+import by.vitalylobatsevich.courser.application.service.StorageService;
 import by.vitalylobatsevich.courser.application.service.implementation.AvatarServiceImpl;
 import by.vitalylobatsevich.courser.database.entity.Avatar;
 import by.vitalylobatsevich.courser.database.repository.AvatarRepository;
-import by.vitalylobatsevich.courser.database.repository.FileRepository;
 import by.vitalylobatsevich.courser.database.repository.UserRepository;
 import by.vitalylobatsevich.courser.factory.AvatarFactory;
 import by.vitalylobatsevich.courser.factory.implementation.AvatarFactoryImpl;
 
 import io.vavr.collection.List;
-
 import io.vavr.control.Option;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,13 +38,25 @@ public class AvatarServiceTests {
     UserRepository userRepository;
 
     @Mock
-    FileRepository fileRepository;
+    FileService fileService;
+
+    @Mock
+    AuthService authService;
+
+    @Mock
+    StorageService storageService;
 
     AvatarFactory avatarFactory = new AvatarFactoryImpl();
 
     @BeforeEach
     void setUp() {
-        avatarService = new AvatarServiceImpl(avatarRepository, userRepository, fileRepository);
+        avatarService = new AvatarServiceImpl(
+                avatarRepository,
+                userRepository,
+                fileService,
+                authService,
+                storageService
+        );
 
         Mockito.lenient()
                 .when(avatarRepository.findAll())

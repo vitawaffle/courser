@@ -68,7 +68,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                                 "/api/auth/signin",
                                 "/api/email-confirmation/confirm"
                         ).permitAll()
-                        .antMatchers(HttpMethod.GET,
+                        .antMatchers(
+                                HttpMethod.GET,
                                 "/api/configuration/password-rules",
                                 "/api/languages"
                         ).permitAll()

@@ -1,11 +1,11 @@
 package by.vitalylobatsevich.courser.application.service.implementation;
 
+import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.application.service.NameService;
 import by.vitalylobatsevich.courser.database.entity.Language;
 import by.vitalylobatsevich.courser.database.entity.Name;
 import by.vitalylobatsevich.courser.database.entity.NameId;
 import by.vitalylobatsevich.courser.database.repository.NameRepository;
-import by.vitalylobatsevich.courser.database.repository.UserRepository;
 import by.vitalylobatsevich.courser.http.dto.NameDTO;
 
 import io.vavr.collection.Seq;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +23,7 @@ public class NameServiceImpl implements NameService {
 
     private final NameRepository nameRepository;
 
-    private final UserRepository userRepository;
+    private final AuthService authService;
 
     @Override
     public Seq<Name> getAll() {
@@ -50,36 +49,33 @@ public class NameServiceImpl implements NameService {
     }
 
     @Override
-    public void save(final NameDTO nameDTO, final String username) {
-        val user = userRepository.findByEmail(username)
-                .getOrElseThrow(() -> new UsernameNotFoundException(username));
+    public void saveForCurrentUser(final NameDTO nameDTO) {
+        val user = authService.getUser();
         save(
                 Name.builder()
                         .firstName(nameDTO.getFirstName())
                         .lastName(nameDTO.getLastName())
                         .patronymic(nameDTO.getPatronymic())
-                        .id(NameId.builder().languageId(nameDTO.getLanguageId()).userId(user.getId()).build())
-                        .language(Language.builder().id(nameDTO.getLanguageId()).build())
+                        .id(new NameId(nameDTO.getLanguageId(), user.getId()))
+                        .language(
+                                Language.builder()
+                                        .id(nameDTO.getLanguageId())
+                                        .build()
+                        )
                         .user(user)
                         .build()
         );
     }
 
     @Override
-    public Seq<NameDTO> getByUsername(final String username) {
-        return nameRepository.findByUser(
-                userRepository.findByEmail(username).getOrElseThrow(() -> new UsernameNotFoundException(username))
-        ).map(NameDTO::new);
+    public Seq<NameDTO> getAllForCurrentUser() {
+        return nameRepository.findByUser(authService.getUser())
+                .map(NameDTO::new);
     }
 
     @Override
-    public void delete(final Long languageId, final String username) {
-        deleteById(new NameId(
-                languageId,
-                userRepository.findByEmail(username)
-                        .getOrElseThrow(() -> new UsernameNotFoundException(username))
-                        .getId()
-        ));
+    public void deleteByLanguageIdForCurrentUser(final Long languageId) {
+        deleteById(new NameId(languageId, authService.getUser().getId()));
     }
 
 }

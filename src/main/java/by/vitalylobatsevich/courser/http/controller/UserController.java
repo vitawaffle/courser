@@ -1,7 +1,7 @@
 package by.vitalylobatsevich.courser.http.controller;
 
-import by.vitalylobatsevich.courser.application.service.UserService;
-import by.vitalylobatsevich.courser.database.entity.User;
+import by.vitalylobatsevich.courser.application.service.AuthService;
+import by.vitalylobatsevich.courser.http.dto.UserDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class UserController extends AppRestController {
+public class UserController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("/me")
-    public User getMe() {
-        return userService.getByEmail(getUsername()).getOrNull();
+    public UserDTO getMe() {
+        return new UserDTO(authService.getUser());
     }
 
 }

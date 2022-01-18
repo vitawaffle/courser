@@ -16,8 +16,8 @@ public interface EmailConfirmationService extends AppService {
 
     ModelAndView confirmEmail(String token, Locale locale);
 
-    ResponseEntity<Object> resendConfirmationEmail(String email, Locale locale);
+    ResponseEntity<?> resendConfirmationEmail(Locale locale);
 
-    Option<Instant> whenCanBeResend(String email);
+    Option<Instant> whenCanBeResend();
 
 }

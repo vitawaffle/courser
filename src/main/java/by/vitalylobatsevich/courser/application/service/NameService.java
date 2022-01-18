@@ -8,10 +8,10 @@ import io.vavr.collection.Seq;
 
 public interface NameService extends CollectionService<Name, NameId> {
 
-    void save(NameDTO nameDTO, String username);
+    void saveForCurrentUser(NameDTO nameDTO);
 
-    Seq<NameDTO> getByUsername(String username);
+    Seq<NameDTO> getAllForCurrentUser();
 
-    void delete(Long languageId, String username);
+    void deleteByLanguageIdForCurrentUser(Long languageId);
 
 }

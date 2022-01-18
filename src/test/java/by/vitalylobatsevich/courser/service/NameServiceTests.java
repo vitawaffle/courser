@@ -1,12 +1,12 @@
 package by.vitalylobatsevich.courser.service;
 
+import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.application.service.NameService;
 import by.vitalylobatsevich.courser.application.service.implementation.NameServiceImpl;
 import by.vitalylobatsevich.courser.database.entity.Name;
 import by.vitalylobatsevich.courser.database.entity.NameId;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.NameRepository;
-import by.vitalylobatsevich.courser.database.repository.UserRepository;
 import by.vitalylobatsevich.courser.factory.NameDTOFactory;
 import by.vitalylobatsevich.courser.factory.NameFactory;
 import by.vitalylobatsevich.courser.factory.implementation.NameDTOFactoryImpl;
@@ -24,7 +24,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,7 +36,7 @@ class NameServiceTests {
     NameRepository nameRepository;
 
     @Mock
-    UserRepository userRepository;
+    AuthService authService;
 
     NameFactory nameFactory = new NameFactoryImpl();
 
@@ -45,7 +44,7 @@ class NameServiceTests {
 
     @BeforeEach
     void setUp() {
-        nameService = new NameServiceImpl(nameRepository, userRepository);
+        nameService = new NameServiceImpl(nameRepository, authService);
 
         Mockito.lenient()
                 .when(nameRepository.findAll())
@@ -72,11 +71,8 @@ class NameServiceTests {
                 .thenReturn(List.of(Name.builder().id(new NameId(1L, 1L)).build()));
 
         Mockito.lenient()
-                .when(userRepository.findByEmail("test.email@test.org"))
-                .thenReturn(Option.of(User.builder().id(1L).build()));
-        Mockito.lenient()
-                .when(userRepository.findByEmail(""))
-                .thenReturn(Option.none());
+                .when(authService.getUser())
+                .thenReturn(User.builder().id(1L).build());
     }
 
     @Test
@@ -110,39 +106,23 @@ class NameServiceTests {
     }
 
     @Test
-    void save_ExistingUsername_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> nameService.save(nameDTOFactory.createValidEntity(), "test.email@test.org"));
+    void saveForCurrentUser_ShouldDoesNotThrow() {
+        assertDoesNotThrow(() -> nameService.saveForCurrentUser(nameDTOFactory.createValidEntity()));
     }
 
     @Test
-    void save_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
-        assertThrows(UsernameNotFoundException.class,
-                     () -> nameService.save(nameDTOFactory.createValidEntity(), ""));
+    void getAllForCurrentUser_ShouldReturnNotEmpty() {
+        assertFalse(() -> nameService.getAllForCurrentUser().isEmpty());
     }
 
     @Test
-    void getByUsername_ExistingUsername_ShouldReturnNotEmpty() {
-        assertFalse(() -> nameService.getByUsername("test.email@test.org").isEmpty());
+    void deleteByLanguageIdForCurrentUser_ExistingLanguageId_ShouldDoesNotThrow() {
+        assertDoesNotThrow(() -> nameService.deleteByLanguageIdForCurrentUser(1L));
     }
 
     @Test
-    void getByUsername_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
-        assertThrows(UsernameNotFoundException.class, () -> nameService.getByUsername(""));
-    }
-
-    @Test
-    void delete_ExistingLanguageIdAndUsername_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> nameService.delete(1L, "test.email@test.org"));
-    }
-
-    @Test
-    void delete_NotExistingUsername_ShouldThrowsUsernameNotFoundException() {
-        assertThrows(UsernameNotFoundException.class, () -> nameService.delete(1L, ""));
-    }
-
-    @Test
-    void delete_NotExistingLanguageId_ShouldDoesNotThrow() {
-        assertDoesNotThrow(() -> nameService.delete(0L, "test.email@test.org"));
+    void deleteByLanguageIdForCurrentUser_NotExistingLanguageId_ShouldDoesNotThrow() {
+        assertDoesNotThrow(() -> nameService.deleteByLanguageIdForCurrentUser(0L));
     }
 
 }

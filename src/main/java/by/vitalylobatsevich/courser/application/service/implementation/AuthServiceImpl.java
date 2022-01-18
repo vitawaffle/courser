@@ -1,6 +1,7 @@
 package by.vitalylobatsevich.courser.application.service.implementation;
 
 import by.vitalylobatsevich.courser.application.event.SigninEvent;
+import by.vitalylobatsevich.courser.application.helper.Auth;
 import by.vitalylobatsevich.courser.application.security.JwtUtils;
 import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.database.entity.Role;
@@ -10,14 +11,10 @@ import by.vitalylobatsevich.courser.http.dto.ChangePasswordDTO;
 import by.vitalylobatsevich.courser.http.dto.LoginCredentialsDTO;
 import by.vitalylobatsevich.courser.http.dto.SigninCredentialsDTO;
 
-import io.vavr.collection.HashMap;
-
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.MessageSource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,20 +39,27 @@ public class AuthServiceImpl implements AuthService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private final MessageSource messageSource;
+    @Override
+    public User getUser() {
+        val username = Auth.getUsername();
+        return userRepository.findByEmail(username).getOrElseThrow(() -> new UsernameNotFoundException(username));
+    }
 
     @Override
     public String signin(final SigninCredentialsDTO signinCredentialsDTO, final Locale locale) {
         applicationEventPublisher.publishEvent(
-                SigninEvent.signinEventBuilder().locale(locale).user(
-                        userRepository.save(
-                                User.builder()
-                                        .email(signinCredentialsDTO.getEmail())
-                                        .password(passwordEncoder.encode(signinCredentialsDTO.getPassword()))
-                                        .roles(List.of(Role.builder().id(1L).build()))
-                                        .build()
+                SigninEvent.signinEventBuilder()
+                        .locale(locale)
+                        .user(
+                                userRepository.save(
+                                        User.builder()
+                                                .email(signinCredentialsDTO.getEmail())
+                                                .password(passwordEncoder.encode(signinCredentialsDTO.getPassword()))
+                                                .roles(List.of(Role.builder().id(1L).build()))
+                                                .build()
+                                )
                         )
-                ).build()
+                        .build()
         );
 
         return login(new LoginCredentialsDTO(signinCredentialsDTO));
@@ -74,28 +78,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<Object> changePassword(
-            final ChangePasswordDTO changePasswordDTO,
-            final String email,
-            final Locale locale
-    ) {
-        val user = userRepository.findByEmail(email).getOrElseThrow(() -> new UsernameNotFoundException(email));
-
-        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body(HashMap.of("oldPassword", messageSource.getMessage(
-                    "validation.old-password",
-                    null,
-                    locale
-            )));
-        }
-
+    public void changePassword(final ChangePasswordDTO changePasswordDTO) {
         userRepository.save(
-                user.updater()
+                getUser().updater()
                         .password(passwordEncoder.encode(changePasswordDTO.getNewPassword()))
                         .update()
         );
-
-        return ResponseEntity.ok(null);
     }
 
 }

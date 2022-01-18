@@ -1,6 +1,6 @@
 package by.vitalylobatsevich.courser.application.validation;
 
-import by.vitalylobatsevich.courser.application.validation.validator.IsFileOwnerValidator;
+import by.vitalylobatsevich.courser.application.validation.validator.OldPasswordValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,12 +8,12 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = IsFileOwnerValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Constraint(validatedBy = OldPasswordValidator.class)
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IsFileOwner {
+public @interface OldPassword {
 
-    String message() default "You do not own this file";
+    String message() default "Invalid old password";
 
     Class<?>[] groups() default {};
 

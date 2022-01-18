@@ -1,12 +1,12 @@
 package by.vitalylobatsevich.courser.http.controller;
 
 import by.vitalylobatsevich.courser.application.service.AvatarService;
-import by.vitalylobatsevich.courser.http.dto.AvatarDTO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/avatars")
@@ -16,14 +16,14 @@ public class AvatarController extends AppRestController {
 
     private final AvatarService avatarService;
 
-    @PostMapping("/me")
-    public void addMe(@RequestBody @Valid final AvatarDTO avatarDTO) {
-        avatarService.add(avatarDTO, getUsername());
+    @GetMapping("/me/current")
+    public Resource getCurrent() {
+        return avatarService.loadCurrentForCurrentUser().getOrNull();
     }
 
-    @PostMapping("/me/current/{id}")
-    public ResponseEntity<?> setCurrent(@PathVariable final Long id) {
-        return avatarService.setCurrent(id, getUsername());
+    @PostMapping("/me")
+    public void store(@RequestParam("file") final MultipartFile file) {
+        avatarService.setForCurrentUser(file);
     }
 
 }

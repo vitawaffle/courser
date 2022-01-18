@@ -1,5 +1,6 @@
 package by.vitalylobatsevich.courser.application.service.implementation;
 
+import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.application.service.EmailConfirmationService;
 import by.vitalylobatsevich.courser.application.service.implementation.exception.SendingConfirmationEmailException;
 import by.vitalylobatsevich.courser.database.entity.EmailConfirmationToken;
@@ -11,7 +12,6 @@ import io.vavr.control.Option;
 import io.vavr.collection.HashMap;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,7 +34,6 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     @Value("${courser.email-confirmation.token.lifetime:86400000}")
@@ -56,6 +54,8 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
     private final MessageSource messageSource;
 
     private final TemplateEngine templateEngine;
+
+    private final AuthService authService;
 
     @Override
     @Async
@@ -125,9 +125,13 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
             return new ModelAndView("error", model.toJavaMap());
         }
 
-        val user = emailConfirmationToken.get().getUser();
-        user.setEmailConfirmedAt(currentTime);
-        userRepository.save(user);
+        userRepository.save(
+                emailConfirmationToken.get()
+                        .getUser()
+                        .updater()
+                        .emailConfirmedAt(currentTime)
+                        .update()
+        );
 
         emailConfirmationTokenRepository.delete(emailConfirmationToken.get());
 
@@ -135,8 +139,8 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
     }
 
     @Override
-    public ResponseEntity<Object> resendConfirmationEmail(final String email, final Locale locale) {
-        val user = userRepository.findByEmail(email).getOrElseThrow(() -> new UsernameNotFoundException(email));
+    public ResponseEntity<?> resendConfirmationEmail(final Locale locale) {
+        val user = authService.getUser();
 
         val emailConfirmationToken = emailConfirmationTokenRepository.findByUser(user);
         if (!emailConfirmationToken.isEmpty()) {
@@ -156,10 +160,9 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
     }
 
     @Override
-    public Option<Instant> whenCanBeResend(final String email) {
-        return emailConfirmationTokenRepository.findByUser(
-                userRepository.findByEmail(email).getOrElseThrow(() -> new UsernameNotFoundException(email))
-        ).map(EmailConfirmationToken::getCanBeResend);
+    public Option<Instant> whenCanBeResend() {
+        return emailConfirmationTokenRepository.findByUser(authService.getUser())
+                .map(EmailConfirmationToken::getCanBeResend);
     }
 
 }

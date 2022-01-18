@@ -73,6 +73,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                                 "/api/configuration/password-rules",
                                 "/api/languages"
                         ).permitAll()
+                        .antMatchers(
+                            HttpMethod.POST,
+                            "/api/emails/exists"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

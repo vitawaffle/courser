@@ -68,6 +68,12 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
+    public Option<Resource> loadById(final Long id) {
+        return avatarRepository.findById(id)
+                .map(avatar -> storageService.loadByFilenameAsResource(avatar.getFile().getName()));
+    }
+
+    @Override
     public Avatar store(final MultipartFile file, final User user) {
         return save(
                 Avatar.builder()
@@ -100,6 +106,34 @@ public class AvatarServiceImpl implements AvatarService {
     @Override
     public void setForCurrentUser(final MultipartFile file) {
         setCurrentForCurrentUser(storeForCurrentUser(file));
+    }
+
+    @Override
+    public Seq<Avatar> getAllByUser(final User user) {
+        return avatarRepository.findByUser(user);
+    }
+
+    @Override
+    public Seq<Avatar> getAllForCurrentUser() {
+        return getAllByUser(authService.getUser());
+    }
+
+    @Override
+    public void deleteCurrent() {
+        avatarRepository.delete(authService.getUser().getAvatar());
+    }
+
+    @Override
+    public void deleteByIdAndUser(final Long id, final User user) {
+        try {
+            avatarRepository.deleteByIdAndUser(id, user);
+        } catch (final EmptyResultDataAccessException ignore) {
+        }
+    }
+
+    @Override
+    public void deleteByIdForCurrentUser(final Long id) {
+        deleteByIdAndUser(id, authService.getUser());
     }
 
 }

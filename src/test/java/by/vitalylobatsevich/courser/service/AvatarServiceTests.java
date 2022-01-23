@@ -3,7 +3,6 @@ package by.vitalylobatsevich.courser.service;
 import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.application.service.AvatarService;
 import by.vitalylobatsevich.courser.application.service.FileService;
-import by.vitalylobatsevich.courser.application.service.StorageService;
 import by.vitalylobatsevich.courser.application.service.implementation.AvatarServiceImpl;
 import by.vitalylobatsevich.courser.database.entity.Avatar;
 import by.vitalylobatsevich.courser.database.repository.AvatarRepository;
@@ -43,9 +42,6 @@ public class AvatarServiceTests {
     @Mock
     AuthService authService;
 
-    @Mock
-    StorageService storageService;
-
     AvatarFactory avatarFactory = new AvatarFactoryImpl();
 
     @BeforeEach
@@ -54,8 +50,7 @@ public class AvatarServiceTests {
                 avatarRepository,
                 userRepository,
                 fileService,
-                authService,
-                storageService
+                authService
         );
 
         Mockito.lenient()

@@ -41,6 +41,11 @@ public class NameServiceImpl implements NameService {
     }
 
     @Override
+    public void delete(final Name name) {
+        nameRepository.delete(name);
+    }
+
+    @Override
     public void deleteById(final NameId nameId) {
         try {
             nameRepository.deleteById(nameId);

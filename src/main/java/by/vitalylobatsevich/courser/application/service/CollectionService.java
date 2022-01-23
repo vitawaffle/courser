@@ -13,6 +13,8 @@ public interface CollectionService<T extends AppEntity, ID> extends AppService {
 
     T save(T t);
 
+    void delete(T t);
+
     void deleteById(ID id);
 
 }

@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/avatars")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class AvatarController extends AppRestController {
+public class AvatarController {
 
     private final AvatarService avatarService;
 
@@ -36,17 +36,17 @@ public class AvatarController extends AppRestController {
 
     @PostMapping("/me")
     public void store(@RequestParam("file") final MultipartFile file) {
-        avatarService.setForCurrentUser(file);
+        avatarService.storeAndSetCurrentForCurrentUser(file);
     }
 
     @DeleteMapping("/me/current")
     public void deleteCurrent() {
-        avatarService.deleteCurrent();
+        avatarService.deleteCurrentForCurrentUserWithFile();
     }
 
     @DeleteMapping("/me/{id}")
     public void deleteById(@PathVariable final Long id) {
-        avatarService.deleteByIdForCurrentUser(id);
+        avatarService.deleteByIdForCurrentUserWithFile(id);
     }
 
 }

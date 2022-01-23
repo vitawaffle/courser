@@ -15,6 +15,8 @@ public interface AvatarRepository extends AppRepository<Avatar, Long> {
 
     Seq<Avatar> findByUser(User user);
 
+    Option<Avatar> findFirstByUser(User user);
+
     void deleteByIdAndUser(Long id, User user);
 
 }

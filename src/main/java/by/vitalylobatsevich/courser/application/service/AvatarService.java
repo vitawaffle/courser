@@ -11,32 +11,34 @@ import io.vavr.control.Option;
 
 public interface AvatarService extends CollectionService<Avatar, Long> {
 
-    Option<Resource> loadCurrent(User user);
+    Option<Resource> loadCurrentForUser(User user);
 
     Option<Resource> loadCurrentForCurrentUser();
 
     Option<Resource> loadById(Long id);
 
-    Avatar store(MultipartFile file, User user);
+    Avatar storeForUser(MultipartFile file, User user);
 
     Avatar storeForCurrentUser(MultipartFile file);
 
-    void setCurrent(Avatar avatar, User user);
+    User setCurrentForUser(Avatar avatar, User user);
 
-    void setCurrentForCurrentUser(Avatar avatar);
+    User setCurrentForCurrentUser(Avatar avatar);
 
-    void set(MultipartFile file, User user);
+    User storeAndSetCurrentForUser(MultipartFile file, User user);
 
-    void setForCurrentUser(MultipartFile file);
+    User storeAndSetCurrentForCurrentUser(MultipartFile file);
 
     Seq<Avatar> getAllByUser(User user);
 
     Seq<Avatar> getAllForCurrentUser();
 
-    void deleteCurrent();
+    void deleteCurrentForUserWithFile(User user);
 
-    void deleteByIdAndUser(Long id, User user);
+    void deleteCurrentForCurrentUserWithFile();
 
-    void deleteByIdForCurrentUser(Long id);
+    void deleteByIdAndUserWithFile(Long id, User user);
+
+    void deleteByIdForCurrentUserWithFile(Long id);
 
 }

@@ -55,4 +55,13 @@ public class Avatar extends LongIdEntity {
 
     }
 
+    @Override
+    public Avatar clone() {
+        return Avatar.builder()
+                .id(getId())
+                .user(user)
+                .file(file)
+                .build();
+    }
+
 }

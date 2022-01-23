@@ -3,7 +3,6 @@ package by.vitalylobatsevich.courser.application.service.implementation;
 import by.vitalylobatsevich.courser.application.service.AuthService;
 import by.vitalylobatsevich.courser.application.service.AvatarService;
 import by.vitalylobatsevich.courser.application.service.FileService;
-import by.vitalylobatsevich.courser.application.service.StorageService;
 import by.vitalylobatsevich.courser.database.entity.Avatar;
 import by.vitalylobatsevich.courser.database.entity.User;
 import by.vitalylobatsevich.courser.database.repository.AvatarRepository;
@@ -31,8 +30,6 @@ public class AvatarServiceImpl implements AvatarService {
 
     private final AuthService authService;
 
-    private final StorageService storageService;
-
     @Override
     public Seq<Avatar> getAll() {
         return avatarRepository.findAll();
@@ -49,6 +46,11 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
+    public void delete(final Avatar avatar) {
+        avatarRepository.delete(avatar);
+    }
+
+    @Override
     public void deleteById(final Long id) {
         try {
             avatarRepository.deleteById(id);
@@ -57,55 +59,53 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public Option<Resource> loadCurrent(final User user) {
-        return Option.of(user.getAvatar())
-                .map(avatar -> storageService.loadByFilenameAsResource(avatar.getFile().getName()));
+    public Option<Resource> loadCurrentForUser(final User user) {
+        return Option.of(user.getAvatar()).map(avatar -> fileService.load(avatar.getFile()));
     }
 
     @Override
     public Option<Resource> loadCurrentForCurrentUser() {
-        return loadCurrent(authService.getUser());
+        return loadCurrentForUser(authService.getUser());
     }
 
     @Override
     public Option<Resource> loadById(final Long id) {
-        return avatarRepository.findById(id)
-                .map(avatar -> storageService.loadByFilenameAsResource(avatar.getFile().getName()));
+        return avatarRepository.findById(id).map(avatar -> fileService.load(avatar.getFile()));
     }
 
     @Override
-    public Avatar store(final MultipartFile file, final User user) {
+    public Avatar storeForUser(final MultipartFile file, final User user) {
         return save(
                 Avatar.builder()
                         .user(user)
-                        .file(fileService.store(file, user))
+                        .file(fileService.storeForUser(file, user))
                         .build()
         );
     }
 
     @Override
     public Avatar storeForCurrentUser(final MultipartFile file) {
-        return store(file, authService.getUser());
+        return storeForUser(file, authService.getUser());
     }
 
     @Override
-    public void setCurrent(final Avatar avatar, final User user) {
-        userRepository.save(user.updater().avatar(avatar).update());
+    public User setCurrentForUser(final Avatar avatar, final User user) {
+        return userRepository.save(user.updater().avatar(avatar).update());
     }
 
     @Override
-    public void setCurrentForCurrentUser(final Avatar avatar) {
-        setCurrent(avatar, authService.getUser());
+    public User setCurrentForCurrentUser(final Avatar avatar) {
+        return setCurrentForUser(avatar, authService.getUser());
     }
 
     @Override
-    public void set(final MultipartFile file, final User user) {
-        setCurrent(store(file, user), user);
+    public User storeAndSetCurrentForUser(final MultipartFile file, final User user) {
+        return setCurrentForUser(storeForUser(file, user), user);
     }
 
     @Override
-    public void setForCurrentUser(final MultipartFile file) {
-        setCurrentForCurrentUser(storeForCurrentUser(file));
+    public User storeAndSetCurrentForCurrentUser(final MultipartFile file) {
+        return setCurrentForCurrentUser(storeForCurrentUser(file));
     }
 
     @Override
@@ -119,21 +119,30 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     @Override
-    public void deleteCurrent() {
-        avatarRepository.delete(authService.getUser().getAvatar());
+    public void deleteCurrentForUserWithFile(final User user) {
+        Option.of(user.getAvatar()).peek(avatar -> {
+            userRepository.save(user.updater().avatar(null).update());
+            delete(avatar);
+            fileService.deleteFromStorage(avatar.getFile());
+        });
     }
 
     @Override
-    public void deleteByIdAndUser(final Long id, final User user) {
-        try {
-            avatarRepository.deleteByIdAndUser(id, user);
-        } catch (final EmptyResultDataAccessException ignore) {
-        }
+    public void deleteCurrentForCurrentUserWithFile() {
+        deleteCurrentForUserWithFile(authService.getUser());
     }
 
     @Override
-    public void deleteByIdForCurrentUser(final Long id) {
-        deleteByIdAndUser(id, authService.getUser());
+    public void deleteByIdAndUserWithFile(final Long id, final User user) {
+        avatarRepository.findByIdAndUser(id, user).peek(avatar -> {
+            delete(avatar);
+            fileService.deleteFromStorage(avatar.getFile());
+        });
+    }
+
+    @Override
+    public void deleteByIdForCurrentUserWithFile(final Long id) {
+        deleteByIdAndUserWithFile(id, authService.getUser());
     }
 
 }

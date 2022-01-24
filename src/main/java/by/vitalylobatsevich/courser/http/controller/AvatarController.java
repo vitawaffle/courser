@@ -1,7 +1,7 @@
 package by.vitalylobatsevich.courser.http.controller;
 
 import by.vitalylobatsevich.courser.application.service.AvatarService;
-import by.vitalylobatsevich.courser.database.entity.Avatar;
+import by.vitalylobatsevich.courser.http.dto.AvatarDTO;
 
 import io.vavr.collection.Seq;
 
@@ -25,8 +25,9 @@ public class AvatarController {
     }
 
     @GetMapping("/me")
-    public Seq<Avatar> getAll() {
-        return avatarService.getAllForCurrentUser();
+    public Seq<AvatarDTO> getAll() {
+        return avatarService.getAllForCurrentUser()
+                .map(avatar -> new AvatarDTO(avatar));
     }
 
     @GetMapping("/{id}")
